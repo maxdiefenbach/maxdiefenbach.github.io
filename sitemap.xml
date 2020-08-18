@@ -3,15 +3,123 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://maxdiefenbach.github.io/categories/</loc>
+    <loc>https://maxdiefenbach.github.io/home/</loc>
+    <lastmod>2020-08-18T17:30:58+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/blog/</loc>
+    <lastmod>2020-08-18T17:30:58+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/impressum/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/research/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
   </url>
   
   <url>
     <loc>https://maxdiefenbach.github.io/</loc>
+    <lastmod>2020-08-18T17:31:07+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/categories/</loc>
+    <lastmod>2020-08-18T17:31:07+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/categories/howto/</loc>
+    <lastmod>2020-08-18T17:31:07+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/</loc>
+    <lastmod>2020-08-18T17:31:07+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/capslock/</loc>
+    <lastmod>2020-08-18T17:31:07+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/irc/</loc>
+    <lastmod>2020-08-18T17:31:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/mvg/</loc>
+    <lastmod>2020-08-18T17:31:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/emacsworldclock/</loc>
+    <lastmod>2020-08-18T17:31:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/mrseqdia/</loc>
+    <lastmod>2020-08-18T17:31:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/tags/emacs/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/orgtablecellmove/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/tags/orgmode/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
   </url>
   
   <url>
     <loc>https://maxdiefenbach.github.io/tags/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/tags/bash/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/bashloop/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/compresspdfs/</loc>
+    <lastmod>2020-08-18T17:31:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/eshellswitch/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/citeismrm/</loc>
+    <lastmod>2020-08-18T17:31:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/searching/</loc>
+    <lastmod>2020-08-18T17:31:00+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://maxdiefenbach.github.io/posts/convertpdf/</loc>
+    <lastmod>2020-08-18T17:30:59+02:00</lastmod>
   </url>
   
 </urlset>

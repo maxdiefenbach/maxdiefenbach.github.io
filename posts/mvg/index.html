@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    
+    
+
+
+    <head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Cache-Control" content="public" />
+<!-- Enable responsiveness on mobile devices -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="generator" content="Hugo 0.57.2" />
+
+    
+    
+    
+
+<title>How to display departures for MVG stations in Emacs • Max Diefenbach</title>
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to display departures for MVG stations in Emacs"/>
+<meta name="twitter:description" content="Simple function in Emacs Lisp to display departures for stations in the Munich public transport system."/>
+
+<meta property="og:title" content="How to display departures for MVG stations in Emacs" />
+<meta property="og:description" content="Simple function in Emacs Lisp to display departures for stations in the Munich public transport system." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://maxdiefenbach.github.io/posts/mvg/" />
+<meta property="article:published_time" content="2018-11-16T11:00:00+01:00" />
+<meta property="article:modified_time" content="2020-08-18T17:31:06+02:00" />
+
+
+    
+
+
+
+
+
+
+<link rel="stylesheet" href="/scss/hyde-hyde.92c66d107d7b219f0792cfd67223179af884b03f386ac46894f9f735932bbca3.css" integrity="sha256-ksZtEH17IZ8Hks/WciMXmviEsD84asRolPn3NZMrvKM=">
+
+
+<link rel="stylesheet" href="/scss/print.2744dcbf8a0b2e74f8a50e4b34e5f441be7cf93cc7de27029121c6a09f9e77bc.css" integrity="sha256-J0Tcv4oLLnT4pQ5LNOX0Qb58&#43;TzH3icCkSHGoJ&#43;ed7w=" media="print">
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+
+    
+    
+
+    <link rel="stylesheet" href="/css/mycss.css">
+
+</head>
+
+
+    <body class=" ">
+    
+<div class="sidebar">
+    <div class="container ">
+        <div class="sidebar-about">
+            <div class="site__title">
+                <a href="https://maxdiefenbach.github.io">Max Diefenbach</a>
+            </div>
+
+            
+            
+            <div class="author-image">
+                <img src="https://www.gravatar.com/avatar/cf1c28d916585358f56b58cb7cb7bf2b?s=240&d=mp" class="img--circle img--headshot element--center" alt="gravatar">
+            </div>
+            
+
+            <div class="section__social">
+                <section class="social">
+	
+	<a href="https://twitter.com/diefenbach_max" rel="me"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	<a href="https://github.com/maxdiefenbach" rel="me"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	<a href="https://linkedin.com/in/maxdiefenbach" rel="me"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a>
+	
+	
+	
+	
+	
+	
+	
+	
+</section>
+
+            </div>
+
+            <div class="site__description">
+                <p>  MR physicist, emacs user, chess and ukulele player  </p>
+            </div>
+
+        </div>
+        <div class="collapsible-menu">
+            <input type="checkbox" id="menuToggle">
+            <label for="menuToggle">Max Diefenbach</label>
+            <div class="menu-content">
+                <div>
+	<ul class="sidebar-nav">
+		 
+		 
+			 
+				<li>
+					<a href="/home/">
+						<span>Home</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/posts">
+						<span>Blog</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/research/">
+						<span>Research</span>
+					</a>
+				</li>
+			 
+		 
+			 
+				<li>
+					<a href="/impressum/">
+						<span>Impressum</span>
+					</a>
+				</li>
+			 
+		
+	</ul>
+</div>
+
+            </div>
+        </div>
+
+        
+<div class="copyright">
+  &copy; 2020 Max Diefenbach. All rights reserved.
+  
+</div>
+
+
+
+
+    </div>
+</div>
+
+        <div class="content container">
+            
+    
+<article>
+  <header>
+    <h1>How to display departures for MVG stations in Emacs</h1>
+    
+    
+<div class="post__meta">
+    
+    
+      <i class="fas fa-calendar-alt"></i> Nov 16, 2018
+    
+    
+    
+      
+      
+          in
+          
+          
+              <a class="badge badge-category" href="/categories/howto">HOWTO</a>
+              
+          
+      
+    
+    
+    
+    <br/>
+    <i class="fas fa-clock"></i> 3 min read
+</div>
+
+
+  </header>
+  
+  
+  <div class="post">
+    <p>Simple function in Emacs Lisp to display departures for stations in the Munich public transport system.</p>
+
+<p>I am currently in Berkeley. Fortunately, there is a public transportation system, namely the Bay Area Rapid Transit (BART),
+and I found a nice emacs package to query departure times. The package is called <a href="https://github.com/mschuldt">bart-mode</a> and can easily be setup by</p>
+
+<pre><code class="language-emacs-lisp">(use-package bart-mode
+  :config
+  (setq bart-station 'dbrk))
+</code></pre>
+
+<p><code>M-x bart</code> then shows you the next departures from the station &ldquo;Downtown Berkeley&rdquo; abbreviated
+by <code>dbrk</code> in the custom variable <code>bart-stations</code>.</p>
+
+<p>I thought this is neat and I would like to have the same functionality for the public transport system in my hometown Munich.</p>
+
+<p>Find the code below.</p>
+
+<p>My elisp-fu is not that good, but the following function got the job done. It&rsquo;s just a simple
+ivy-selection for the station name and eww browsing to a sort of hidden api that I found <a href="https://github.com/pc-coholic/PyMVGLive">here.</a></p>
+
+<p>The <code>M-x mvg/departure</code> allows to select a station and then opens up a eww window showing all depatures.</p>
+
+<pre><code class="language-emacs-lisp">(defconst mvg/stations '(&quot;Aidenbachstraße&quot;
+                         &quot;Allach&quot;
+                         &quot;Alte Heide&quot;
+                         &quot;Altenerding&quot;
+                         &quot;Am Hart&quot;
+                         &quot;Am Münchner Tor&quot;
+                         &quot;Amalienburgstraße&quot;
+                         &quot;Anni-Albers-Straße&quot;
+                         &quot;Arabellapark&quot;
+                         &quot;Arabellapark/Klinikum Bogenhausen&quot;
+                         &quot;Arnbach&quot;
+                         &quot;Aubing&quot;
+                         &quot;Aufhausen&quot;
+                         &quot;Aying&quot;
+                         &quot;Bachern–Dachau Stadt&quot;
+                         &quot;Baierbrunn&quot;
+                         &quot;Baldham&quot;
+                         &quot;Basler Straße&quot;
+                         &quot;Berg am Laim Bahnhof&quot;
+                         &quot;Berg am Laim&quot;
+                         &quot;Bonner Platz&quot;
+                         &quot;Brudermühlstraße&quot;
+                         &quot;Buchenau&quot;
+                         &quot;Buchenhain&quot;
+                         &quot;Böhmerwaldplatz&quot;
+                         &quot;Candidplatz&quot;
+                         &quot;Dachau Bahnhof&quot;
+                         &quot;Daglfing&quot;
+                         &quot;Deisenhofen&quot;
+                         &quot;Derbolfinger Platz&quot;
+                         &quot;Dietlindenstraße&quot;
+                         &quot;Domagkstraße&quot;
+                         &quot;Donnersbergerbrücke&quot;
+                         &quot;Donnersbergerstraße&quot;
+                         &quot;Dülferstraße&quot;
+                         &quot;Dürrnhaar&quot;
+                         &quot;Ebenhausen-Schäftlarn&quot;
+                         &quot;Ebersberg&quot;
+                         &quot;Eching&quot;
+                         &quot;Effnerplatz&quot;
+                         &quot;Eglharting&quot;
+                         &quot;Eichenau&quot;
+                         &quot;Englschalking&quot;
+                         &quot;Erding&quot;
+                         &quot;Erding-Fliegerhorst&quot;
+                         &quot;Erdweg&quot;
+                         &quot;Esting&quot;
+                         &quot;Fasanenpark&quot;
+                         &quot;Fasanerie&quot;
+                         &quot;Fasangarten&quot;
+                         &quot;Feldafing&quot;
+                         &quot;Feldkirchen&quot;
+                         &quot;Feldmoching&quot;
+                         &quot;Feldmoching†&quot;
+                         &quot;Flughafen Besucherpark&quot;
+                         &quot;Flughafen München&quot;
+                         &quot;Forstenrieder Allee&quot;
+                         &quot;Frankfurter Ring&quot;
+                         &quot;Fraunhoferstraße&quot;
+                         &quot;Freiham&quot;
+                         &quot;Freimann&quot;
+                         &quot;Freising&quot;
+                         &quot;Friedenheimer Straße&quot;
+                         &quot;Fröttmaning&quot;
+                         &quot;Furth&quot;
+                         &quot;Fürstenfeldbruck&quot;
+                         &quot;Fürstenried West†&quot;
+                         &quot;Fürstenrieder Straße&quot;
+                         &quot;Garching&quot;
+                         &quot;Garching-Forschungszentrum†&quot;
+                         &quot;Garching-Hochbrück&quot;
+                         &quot;Gasteig&quot;
+                         &quot;Gauting&quot;
+                         &quot;Geisenbrunn&quot;
+                         &quot;Geltendorf&quot;
+                         &quot;Gelting&quot;
+                         &quot;Georg-Brauchle-Ring&quot;
+                         &quot;Geretsried Mitte&quot;
+                         &quot;Geretsried Süd&quot;
+                         &quot;Germering-Unterpfaffenhofen&quot;
+                         &quot;Gern&quot;
+                         &quot;Gernlinden&quot;
+                         &quot;Giesing Bahnhof&quot;
+                         &quot;Giesing Bhf.&quot;
+                         &quot;Giesing&quot;
+                         &quot;Gilching-Argelsried&quot;
+                         &quot;Giselastraße&quot;
+                         &quot;Goetheplatz&quot;
+                         &quot;Gondrellplatz&quot;
+                         &quot;Grafing Bahnhof&quot;
+                         &quot;Grafing Stadt&quot;
+                         &quot;Grafrath&quot;
+                         &quot;Gronsdorf&quot;
+                         &quot;Großhadern&quot;
+                         &quot;Großhelfendorf&quot;
+                         &quot;Großhesselohe Isartalbahnhof&quot;
+                         &quot;Großhesseloher Brücke&quot;
+                         &quot;Grub&quot;
+                         &quot;Gräfelfing&quot;
+                         &quot;Gröbenzell&quot;
+                         &quot;Grünwald&quot;
+                         &quot;Haar&quot;
+                         &quot;Hackerbrücke&quot;
+                         &quot;Haderner Stern&quot;
+                         &quot;Hallbergmoos&quot;
+                         &quot;Harras&quot;
+                         &quot;Harthaus&quot;
+                         &quot;Harthof&quot;
+                         &quot;Hauptbahnhof Nord&quot;
+                         &quot;Hauptbahnhof Süd&quot;
+                         &quot;Hauptbahnhof&quot;
+                         &quot;Hebertshausen (Altomünster)&quot;
+                         &quot;Heimeranplatz&quot;
+                         &quot;Heimstetten&quot;
+                         &quot;Herrsching&quot;
+                         &quot;Hirschgarten&quot;
+                         &quot;Hochschule München&quot;
+                         &quot;Hohenbrunn&quot;
+                         &quot;Hohenschäftlarn&quot;
+                         &quot;Hohenzollernplatz&quot;
+                         &quot;Holzapfelkreuth&quot;
+                         &quot;Holzkirchen&quot;
+                         &quot;Höhenkirchen-Siegertsbrunn&quot;
+                         &quot;Höllriegelskreuth&quot;
+                         &quot;Icking&quot;
+                         &quot;Implerstraße&quot;
+                         &quot;Innsbrucker Ring&quot;
+                         &quot;Isartor&quot;
+                         &quot;Ismaning&quot;
+                         &quot;Johanneskirchen&quot;
+                         &quot;Josephsburg&quot;
+                         &quot;Josephsplatz&quot;
+                         &quot;Karl-Preis-Platz&quot;
+                         &quot;Karlsfeld&quot;
+                         &quot;Karlsplatz (Stachus) Nord&quot;
+                         &quot;Karlsplatz (Stachus)&quot;
+                         &quot;Karlsplatz-Stachus&quot;
+                         &quot;Karolinenplatz&quot;
+                         &quot;Kieferngarten&quot;
+                         &quot;Kirchseeon&quot;
+                         &quot;Kleinberghofen&quot;
+                         &quot;Klinikum Bogenhausen&quot;
+                         &quot;Klinikum Großhadern&quot;
+                         &quot;Kolumbusplatz&quot;
+                         &quot;Kreillerstraße&quot;
+                         &quot;Kreuzstraße&quot;
+                         &quot;Kurfürstenplatz&quot;
+                         &quot;Königsplatz&quot;
+                         &quot;Laim&quot;
+                         &quot;Laimer Platz&quot;
+                         &quot;Langwied&quot;
+                         &quot;Lautensackstraße&quot;
+                         &quot;Lehel&quot;
+                         &quot;Leienfelsstraße&quot;
+                         &quot;Leonrodplatz&quot;
+                         &quot;Leuchtenbergring&quot;
+                         &quot;Lochham&quot;
+                         &quot;Lochhausen&quot;
+                         &quot;Lohhof&quot;
+                         &quot;Machtlfinger Straße&quot;
+                         &quot;Maillingerstraße&quot;
+                         &quot;Maisach&quot;
+                         &quot;Malching&quot;
+                         &quot;Mammendorf&quot;
+                         &quot;Mangfallplatz&quot;
+                         &quot;Mariahilfplatz&quot;
+                         &quot;Marienplatz&quot;
+                         &quot;Markt Indersdorf&quot;
+                         &quot;Markt Schwaben&quot;
+                         &quot;Max-Weber-Platz&quot;
+                         &quot;Maximilianeum&quot;
+                         &quot;Maxmonument&quot;
+                         &quot;Messestadt-Ost&quot;
+                         &quot;Messestadt-West&quot;
+                         &quot;Michaelibad&quot;
+                         &quot;Milbertshofen&quot;
+                         &quot;Mittersendling&quot;
+                         &quot;Moosach Bahnhof&quot;
+                         &quot;Moosach&quot;
+                         &quot;Moosacher St.-Martins-Platz&quot;
+                         &quot;Moosach†&quot;
+                         &quot;Moosfeld&quot;
+                         &quot;Münchner Freiheit&quot;
+                         &quot;Neuaubing&quot;
+                         &quot;Neubiberg&quot;
+                         &quot;Neufahrn&quot;
+                         &quot;Neugilching&quot;
+                         &quot;Neuperlach Süd&quot;
+                         &quot;Neuperlach Süd†&quot;
+                         &quot;Neuperlach Zentrum&quot;
+                         &quot;Niederroth&quot;
+                         &quot;Nordfriedhof&quot;
+                         &quot;Obermenzing&quot;
+                         &quot;Oberschleißheim&quot;
+                         &quot;Obersendling&quot;
+                         &quot;Olching&quot;
+                         &quot;Olympia-Einkaufszentrum&quot;
+                         &quot;Olympiazentrum&quot;
+                         &quot;Ostbahnhof&quot;
+                         &quot;Ostfriedhof&quot;
+                         &quot;Ottenhofen&quot;
+                         &quot;Otterfing&quot;
+                         &quot;Ottobrunn&quot;
+                         &quot;Partnachplatz&quot;
+                         &quot;Parzivalplatz&quot;
+                         &quot;Pasing Bahnhof&quot;
+                         &quot;Pasing&quot;
+                         &quot;Peiß&quot;
+                         &quot;Perlach&quot;
+                         &quot;Petershausen&quot;
+                         &quot;Petuelring&quot;
+                         &quot;Planegg&quot;
+                         &quot;Poccistraße&quot;
+                         &quot;Poing&quot;
+                         &quot;Possenhofen&quot;
+                         &quot;Potsdamer Straße&quot;
+                         &quot;Prinzregentenplatz&quot;
+                         &quot;Puchheim&quot;
+                         &quot;Pullach&quot;
+                         &quot;Pulling&quot;
+                         &quot;Quiddestraße&quot;
+                         &quot;Richard-Strauss-Straße&quot;
+                         &quot;Riem&quot;
+                         &quot;Romanplatz&quot;
+                         &quot;Rosenheimer Platz&quot;
+                         &quot;Rotkreuzplatz&quot;
+                         &quot;Röhrmoos&quot;
+                         &quot;Sauerlach&quot;
+                         &quot;Scheidplatz&quot;
+                         &quot;Schwabhausen&quot;
+                         &quot;Schwabing Nord&quot;
+                         &quot;Schwaigerloh (Wendeanlage)&quot;
+                         &quot;Schwaigerloh&quot;
+                         &quot;Schwanseestraße&quot;
+                         &quot;Schwanthalerhöhe&quot;
+                         &quot;Schöngeising&quot;
+                         &quot;Seefeld-Hechendorf&quot;
+                         &quot;Sendlinger Tor&quot;
+                         &quot;Siemenswerke&quot;
+                         &quot;Silberhornstraße&quot;
+                         &quot;Solln&quot;
+                         &quot;St. Emmeram&quot;
+                         &quot;St. Koloman&quot;
+                         &quot;St.-Martin-Straße&quot;
+                         &quot;St.-Quirin-Platz&quot;
+                         &quot;St.-Veit-Straße&quot;
+                         &quot;Starnberg Nord&quot;
+                         &quot;Starnberg&quot;
+                         &quot;Steinebach&quot;
+                         &quot;Stiglmaierplatz&quot;
+                         &quot;Stockdorf&quot;
+                         &quot;Studentenstadt&quot;
+                         &quot;Taufkirchen&quot;
+                         &quot;Thalkirchen&quot;
+                         &quot;Theatinerstraße&quot;
+                         &quot;Therese-Giehse-Allee&quot;
+                         &quot;Theresienstraße&quot;
+                         &quot;Theresienwiese&quot;
+                         &quot;Trappentreustraße&quot;
+                         &quot;Trudering&quot;
+                         &quot;Tutzing&quot;
+                         &quot;Türkenfeld&quot;
+                         &quot;Universität&quot;
+                         &quot;Unterföhring&quot;
+                         &quot;Unterhaching&quot;
+                         &quot;Untermenzing&quot;
+                         &quot;Untersbergstraße&quot;
+                         &quot;Unterschleißheim&quot;
+                         &quot;Vaterstetten&quot;
+                         &quot;Vierkirchen-Esterhofen&quot;
+                         &quot;Westendstraße&quot;
+                         &quot;Westfriedhof&quot;
+                         &quot;Westkreuz&quot;
+                         &quot;Westpark&quot;
+                         &quot;Wettersteinplatz&quot;
+                         &quot;Weßling&quot;
+                         &quot;Willibaldplatz&quot;
+                         &quot;Wolfratshausen&quot;
+                         &quot;Wächterhof&quot;
+                         &quot;Zorneding&quot;
+                         )
+  &quot;MVG Stations collected from
+https://de.wikipedia.org/wiki/Stra%C3%9Fenbahn_M%C3%BCnchen
+https://de.wikipedia.org/wiki/Liste_der_Stationen_der_S-Bahn_M%C3%BCnchen
+https://en.wikipedia.org/wiki/List_of_Munich_U-Bahn_stations
+&quot;)
+
+(defun mvg/departure (station)
+  &quot;Look up upcomming departures for MVG station&quot;
+  (interactive (list (ivy-read &quot;Choose MVG station: &quot; mvg/stations)))
+  (let* ((base-url &quot;http://www.mvg-live.de/ims/dfiStaticAuswahl.svc&quot;)
+         (url (concat url
+                      &quot;?haltestelle=&quot;
+                      (url-hexify-string station))))
+    (save-excursion
+      (switch-to-buffer-other-window &quot;*mvg*&quot;)
+      (eww url)
+      (kill-buffer &quot;*mvg*&quot;))))
+</code></pre>
+  </div>
+  
+
+
+  
+
+
+
+
+  
+    
+
+
+</article>
+
+
+        </div>
+        
+    
+
+<script defer src="https://use.fontawesome.com/releases/v5.11.2/js/all.js" integrity="sha384-b3ua1l97aVGAPEIe48b4TC60WUQbQaGi2jqAWM90y0OZXZeyaTCWtBTKtjW2GXG1" crossorigin="anonymous"></script>
+
+
+
+
+    
+
+
+
+    </body>
+</html>

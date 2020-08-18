@@ -1,56 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Max Diefenbach</title>
-    <link>https://maxdiefenbach.github.io/</link>
-    <description>Recent content on Max Diefenbach</description>
+    <title>Posts on Max Diefenbach</title>
+    <link>https://maxdiefenbach.github.io/posts/</link>
+    <description>Recent content in Posts on Max Diefenbach</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 04 Dec 2019 00:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 20 Nov 2018 11:00:00 +0100</lastBuildDate>
     
-	<atom:link href="https://maxdiefenbach.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://maxdiefenbach.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Home</title>
-      <link>https://maxdiefenbach.github.io/home/</link>
-      <pubDate>Wed, 04 Dec 2019 00:00:00 +0100</pubDate>
-      
-      <guid>https://maxdiefenbach.github.io/home/</guid>
-      <description>Hi,
-my name is Max Diefenbach.
-On this blog I try to collect information on tutorials, best practices, code snippets, ideas, etc., primarily for myself to not forget. Hopefully this information can also be useful to others.
-During work and recreational computer time, I take notes on almost anything using emacs org-mode. Now I try to convert some of these notes into posts on this blog to revisit and structure them into a more searchable format.</description>
-    </item>
-    
-    <item>
-      <title>Blog</title>
-      <link>https://maxdiefenbach.github.io/blog/</link>
-      <pubDate>Wed, 04 Dec 2019 00:00:00 +0100</pubDate>
-      
-      <guid>https://maxdiefenbach.github.io/blog/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Impressum</title>
-      <link>https://maxdiefenbach.github.io/impressum/</link>
-      <pubDate>Wed, 04 Dec 2019 00:00:00 +0100</pubDate>
-      
-      <guid>https://maxdiefenbach.github.io/impressum/</guid>
-      <description>Webmaster: Maximilian N. Diefenbach Email: maxdiefenbach@protonmail.com
-Haftung für Inhalte Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt.</description>
-    </item>
-    
-    <item>
-      <title>Research</title>
-      <link>https://maxdiefenbach.github.io/research/</link>
-      <pubDate>Wed, 04 Dec 2019 00:00:00 +0100</pubDate>
-      
-      <guid>https://maxdiefenbach.github.io/research/</guid>
-      <description>Currently I do research on Covid-19.
-During my PhD I was a member of the Body Magnetic Resonance Research Group (BMRR) in the Department of Diagnostic and Interventional Radiology at the university hospital MRI Klinikum rechts der Isar of the Technical University Munich. In my research projects I focused on two aspects: water&amp;#x2013;fat imaging and quantitative susceptibility mapping, both targetting clinical applications outside the brain.</description>
-    </item>
     
     <item>
       <title>This is just another post …</title>
