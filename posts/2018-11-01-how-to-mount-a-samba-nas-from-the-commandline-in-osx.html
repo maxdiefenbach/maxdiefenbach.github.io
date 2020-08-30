@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Personal Website" />
+        <meta name="author" content="Max Diefenbach" />
+        <title>Max Diefenbach</title>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/a81715ae5b.js" crossorigin="anonymous"></script>
+        <link href="../css/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="container ">
+                <div class="sidebar-about">
+                    <div class="site__title">
+                        <a href="../">Max Diefenbach</a>
+                    </div>
+                    <div class="author-image">
+                        <a href="../">
+                            <img src="https://www.gravatar.com/avatar/cf1c28d916585358f56b58cb7cb7bf2b?s=240&d=mp" class="img--circle img--headshot element--center" alt="gravatar">
+                        </a>
+                    </div>
+                    <div class="section__social">
+                        <section class="social">
+	                          <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/diefenbach_max"><i class="fa fa-twitter fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://linkedin.com/in/maxdiefenbach"><i class="fa fa-linkedin fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://github.com/maxdiefenbach"><i class="fa fa-github fa-lg"></i></a>
+                            <a target="_blank" rel="noopener noreferrer" href="https://orcid.org/0000-0002-5581-885X"><i class="fab fa-orcid fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://www.researchgate.net/profile/Maximilian_Diefenbach"><i class="fab fa-researchgate fa-lg"></i></a>
+                        </section>
+                    </div>
+                    <div class="site__description">
+                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                    </div>
+                </div>
+                <div class="collapsible-menu">
+                    <input type="checkbox" id="menuToggle">
+                    <label for="menuToggle">Max Diefenbach</label>
+                    <div class="menu-content">
+                        <ul class="sidebar-nav">
+                            <!-- <li><a href="/">Home</a></li> -->
+                            <li><a href="../pages/contact.html">Contact</a></li>
+                            <li><a href="../pages/research.html">Research</a></li>
+                            <li><a href="../pages/code.html">Code</a></li>
+                            <li><a href="../pages/posts.html">Posts</a></li>
+                            <li><a href="../pages/impressum.html" style="font-size:small;color:rgba(255,255,255,0.5);">Impressum</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="copyright">
+                    &copy; 2020 Max Diefenbach
+                </div>
+            </div>
+        </div>
+        <div class="content container">
+            <main role="main">
+                <h1>How to mount a samba NAS from the commandline in OSX</h1>
+                <article>
+    <section class="header">
+        Posted on November  1, 2018
+        
+    </section>
+    <br />
+    <section>
+        <p>A commandline oneliner to mount a network drive in OSX using Finder from applescript. (+ script &amp; emacs lisp function)</p>
+<p>At work we use a Network Access Server (NAS) to store data and my office computer is an iMac (… yeah, I know). Somehow I never managed to use the normal <code>mount</code> command to connect to the server. Of course, one can always use the Finder GUI to connect to the NAS (“CMD+K”), but as I recently needed to use my office computer remotely and access data from the NAS, a mount method from the terminal was needed.</p>
+<p>After some searching I found a solution using applescript (<a href="https://stackoverflow.com/questions/4108808/applescript-oneliner">https://stackoverflow.com/questions/4108808/applescript-oneliner</a>). One can basically write a script that tells Finder to mount the NAS without the GUI,</p>
+<pre class="example"><code># mount_nas.scpt
+tell application &quot;Finder&quot;
+  activate
+  open location &quot;smb://&lt;user&gt;@&lt;host&gt;/&lt;path&gt;&quot;
+end tell
+</code></pre>
+<p>which can then be envoked by</p>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">osascript</span> mount_nas.scpt</span></code></pre></div>
+<p>I also wanted a direct oneliner, which can be achieved by</p>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">osascript</span> -e <span class="st">&quot;tell application </span><span class="dt">\&quot;</span><span class="st">Finder</span><span class="dt">\&quot;</span><span class="st"> to activate &amp; open location </span><span class="dt">\&quot;</span><span class="st">smb://&lt;user&gt;@&lt;host&gt;/&lt;path&gt;</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="op">&amp;&gt;</span> /dev/null</span></code></pre></div>
+<p>Somehow this threw an ugly warning, which I just suppressed by appending <code>'&amp;&gt; /dev/null'</code>.</p>
+<p>Finally I wanted to mount the NAS from within emacs, which got me to this function:</p>
+<div class="sourceCode" id="cb4" data-org-language="emacs-lisp"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>(<span class="kw">defun</span><span class="fu"> mnd/mount-nas </span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  <span class="st">&quot;mount a samba nas in osx using finder from applescript&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>  (interactive)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>  (call-process-shell-command</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>   (concat <span class="st">&quot;osascript -e &quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>           <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">tell application </span><span class="sc">\\\&quot;</span><span class="st">Finder</span><span class="sc">\\\&quot;</span><span class="st"> to activate &amp; &quot;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>           <span class="st">&quot;open location &quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>           <span class="st">&quot;</span><span class="sc">\\\&quot;</span><span class="st">&lt;user&gt;@&lt;host&gt;/&lt;path&gt;</span><span class="sc">\\\&quot;\&quot;</span><span class="st"> &quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>           <span class="st">&quot;&amp;&gt; /dev/null&quot;</span>)))</span></code></pre></div>
+<p>Just needed to be a bit careful with the escapes.</p>
+    </section>
+</article>
+
+            </main>
+        </div>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
+    </body>
+</html>

@@ -6,20 +6,20 @@
         <meta name="description" content="Personal Website" />
         <meta name="author" content="Max Diefenbach" />
         <title>Max Diefenbach</title>
-        <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <script src="https://kit.fontawesome.com/a81715ae5b.js" crossorigin="anonymous"></script>
-        <link href="./css/styles.css" rel="stylesheet" />
+        <link href="../css/styles.css" rel="stylesheet" />
     </head>
     <body>
         <div class="sidebar">
             <div class="container ">
                 <div class="sidebar-about">
                     <div class="site__title">
-                        <a href="./">Max Diefenbach</a>
+                        <a href="../">Max Diefenbach</a>
                     </div>
                     <div class="author-image">
-                        <a href="./">
+                        <a href="../">
                             <img src="https://www.gravatar.com/avatar/cf1c28d916585358f56b58cb7cb7bf2b?s=240&d=mp" class="img--circle img--headshot element--center" alt="gravatar">
                         </a>
                     </div>
@@ -42,11 +42,11 @@
                     <div class="menu-content">
                         <ul class="sidebar-nav">
                             <!-- <li><a href="/">Home</a></li> -->
-                            <li><a href="./pages/contact.html">Contact</a></li>
-                            <li><a href="./pages/research.html">Research</a></li>
-                            <li><a href="./pages/code.html">Code</a></li>
-                            <li><a href="./pages/posts.html">Posts</a></li>
-                            <li><a href="./pages/impressum.html" style="font-size:small;color:rgba(255,255,255,0.5);">Impressum</a></li>
+                            <li><a href="../pages/contact.html">Contact</a></li>
+                            <li><a href="../pages/research.html">Research</a></li>
+                            <li><a href="../pages/code.html">Code</a></li>
+                            <li><a href="../pages/posts.html">Posts</a></li>
+                            <li><a href="../pages/impressum.html" style="font-size:small;color:rgba(255,255,255,0.5);">Impressum</a></li>
                         </ul>
                     </div>
                 </div>
@@ -57,12 +57,30 @@
         </div>
         <div class="content container">
             <main role="main">
-                <h1>Home</h1>
-                <h2 id="about">About</h2>
-<p>Hi,</p>
-<p>my name is Max Diefenbach.</p>
-<p>On this blog I try to collect information on tutorials, best practices, code snippets, ideas, etc., primarily for myself to not forget. Hopefully this information can also be useful to others.</p>
-<p>During work and recreational computer time, I take notes on almost anything using <a href="https://www.gnu.org/software/emacs/">emacs</a> <a href="http://orgmode.org/">org-mode</a>. Now I try to convert some of these notes into posts on this blog to revisit and structure them into a more searchable format.</p>
+                <h1>How to display world clock in Emacs</h1>
+                <article>
+    <section class="header">
+        Posted on November 14, 2018
+        
+    </section>
+    <br />
+    <section>
+        <p>Emacs has a built-in world clock! (of course)</p>
+<p>It is handy, for example if you collaborate and set up conference calls with people in different timezones.</p>
+<p>To run the command: <code>M-x display-time-world</code></p>
+<p>To customize the locations for which you want to see the local datetime, there is the variable <code>display-time-world-list</code>.</p>
+<div class="sourceCode" id="cb1" data-org-language="emacs-lisp"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">;; findout timezone location strings at http://worldtime.io</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>(<span class="kw">setq</span> display-time-world-list '((<span class="st">&quot;Europe/Berlin&quot;</span> <span class="st">&quot;Munich&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>                                (<span class="st">&quot;America/Los_Angeles&quot;</span> <span class="st">&quot;Berkeley&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>                                (<span class="st">&quot;China/Hong_Kong&quot;</span> <span class="st">&quot;Hong Kong&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>                                (<span class="st">&quot;America/Montreal&quot;</span> <span class="st">&quot;Montreal&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>                                (<span class="st">&quot;America/New_York&quot;</span> <span class="st">&quot;New York&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>                                (<span class="st">&quot;Europe/London&quot;</span> <span class="st">&quot;London&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>                                ))</span></code></pre></div>
+<p>To findout the actual names for different timezone locations, I searched on <a href="http://worldtime.io">http://worldtime.io</a>.</p>
+    </section>
+</article>
+
             </main>
         </div>
         <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
