@@ -97,7 +97,6 @@
 <th>Text lazy</th>
 <th>ByteString strict</th>
 <th>ByteString lazy</th>
-<th>[Word8]</th>
 </tr>
 </thead>
 <tbody>
@@ -108,7 +107,6 @@
 <td>TL.pack</td>
 <td>BC.pack</td>
 <td>BCL.pack</td>
-<td>B.pack</td>
 </tr>
 <tr class="even">
 <td>Text strict</td>
@@ -117,7 +115,6 @@
 <td>TL.fromStrict</td>
 <td>TE.encodeUtf8</td>
 <td>TEL.encodeUtf8 . TL.fromStrict</td>
-<td></td>
 </tr>
 <tr class="odd">
 <td>Text lazy</td>
@@ -126,7 +123,6 @@
 <td>id</td>
 <td>BL.fromStrict . TEL.encodeUtf8</td>
 <td>TEL.encodeUtf8</td>
-<td></td>
 </tr>
 <tr class="even">
 <td>ByteString strict</td>
@@ -135,7 +131,6 @@
 <td>TEL.decodeUtf8 . BL.fromStrict</td>
 <td>id</td>
 <td>BL.fromStrict</td>
-<td></td>
 </tr>
 <tr class="odd">
 <td>ByteString lazy</td>
@@ -144,7 +139,6 @@
 <td>TEL.decodeUtf8</td>
 <td>BL.toStrict</td>
 <td>id</td>
-<td></td>
 </tr>
 </tbody>
 </table>
