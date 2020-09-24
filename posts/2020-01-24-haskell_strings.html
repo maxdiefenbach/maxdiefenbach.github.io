@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Personal Website" />
+        <meta name="author" content="Max Diefenbach" />
+        <title>Max Diefenbach</title>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/a81715ae5b.js" crossorigin="anonymous"></script>
+        <link href="../css/styles.css" rel="stylesheet" />
+        <link href="../css/codeblock.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="container ">
+                <div class="sidebar-about">
+                    <div class="site__title">
+                        <a href="../">Max Diefenbach</a>
+                    </div>
+                    <div class="author-image">
+                        <a href="../">
+                            <img src="https://www.gravatar.com/avatar/cf1c28d916585358f56b58cb7cb7bf2b?s=240&d=mp" class="img--circle img--headshot element--center" alt="gravatar">
+                        </a>
+                    </div>
+                    <div class="section__social">
+                        <section class="social">
+	                          <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/diefenbach_max"><i class="fa fa-twitter fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://linkedin.com/in/maxdiefenbach"><i class="fa fa-linkedin fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://github.com/maxdiefenbach"><i class="fa fa-github fa-lg"></i></a>
+                            <a target="_blank" rel="noopener noreferrer" href="https://orcid.org/0000-0002-5581-885X"><i class="fab fa-orcid fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://www.researchgate.net/profile/Maximilian_Diefenbach"><i class="fab fa-researchgate fa-lg"></i></a>
+                        </section>
+                    </div>
+                    <div class="site__description">
+                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                    </div>
+                </div>
+                <div class="collapsible-menu">
+                    <input type="checkbox" id="menuToggle">
+                    <label for="menuToggle">Max Diefenbach</label>
+                    <div class="menu-content">
+                        <ul class="sidebar-nav">
+                            <!-- <li><a href="/">Home</a></li> -->
+                            <li><a href="../pages/contact.html">Contact</a></li>
+                            <li><a href="../pages/research.html">Research</a></li>
+                            <li><a href="../pages/code.html">Code</a></li>
+                            <li><a href="../pages/posts.html">Posts</a></li>
+                            <li><a href="../pages/impressum.html" style="font-size:small;color:rgba(255,255,255,0.5);">Impressum</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="copyright">
+                    &copy; 2020 Max Diefenbach
+                </div>
+            </div>
+        </div>
+        <div class="content container">
+            <main role="main">
+                <h1>How to convert String/Text/ByteString in Haskell</h1>
+                <article>
+    <section class="header">
+        Posted on January 24, 2020
+        
+        <div class="info">
+            
+            Tags: <a title="All pages tagged 'howto haskell'." href="../posts/tags/howto%20haskell.html">howto haskell</a>
+            
+        </div>
+    </section>
+    <br />
+    <section>
+        <p>Lookup table for the conversion of String/Text/ByteString in Haskell:</p>
+<div class="sourceCode" id="cb1" data-tangle="no"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">dependencies</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> base</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> bytestring</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> text</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Encoding</span> <span class="kw">as</span> <span class="dt">TE</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy</span> <span class="kw">as</span> <span class="dt">TL</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy.Encoding</span> <span class="kw">as</span> <span class="dt">TEL</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString</span> <span class="kw">as</span> <span class="dt">BS</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Char8</span> <span class="kw">as</span> <span class="dt">BC</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">BL</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Lazy.Char8</span> <span class="kw">as</span> <span class="dt">BCL</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>From/To</th>
+<th>String</th>
+<th>Text strict</th>
+<th>Text lazy</th>
+<th>ByteString strict</th>
+<th>ByteString lazy</th>
+<th>[Word8]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>String</td>
+<td>id</td>
+<td>T.pack</td>
+<td>TL.pack</td>
+<td>BC.pack</td>
+<td>BCL.pack</td>
+<td>B.pack</td>
+</tr>
+<tr class="even">
+<td>Text strict</td>
+<td>T.unpack</td>
+<td>id</td>
+<td>TL.fromStrict</td>
+<td>TE.encodeUtf8</td>
+<td>TEL.encodeUtf8 . TL.fromStrict</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Text lazy</td>
+<td>TL.unpack</td>
+<td>TL.toStrict</td>
+<td>id</td>
+<td>BL.fromStrict . TEL.encodeUtf8</td>
+<td>TEL.encodeUtf8</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>ByteString strict</td>
+<td>BC.unpack</td>
+<td>TE.decodeUtf8</td>
+<td>TEL.decodeUtf8 . BL.fromStrict</td>
+<td>id</td>
+<td>BL.fromStrict</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>ByteString lazy</td>
+<td>BCL.unpack</td>
+<td>TL.toStrict . TEL.decodeUtf8</td>
+<td>TEL.decodeUtf8</td>
+<td>BL.toStrict</td>
+<td>id</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="addendum">Addendum</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">import</span> <span class="dt">Data.ByteString.Internal</span> (w2c, c2w)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">-- w2c :: Word8 -&gt; Char</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="co">-- c2w :: Char -&gt; Word8</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="co">-- BS.pack :: [Word8] -&gt; BS.ByteString</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="co">-- BS.unpack :: BS.ByteString -&gt; [Word8]</span></span></code></pre></div>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://hackage.haskell.org/package/bytestring">bytestring: Fast, compact, strict and lazy byte strings with a list interface</a></li>
+<li><a href="https://mmhaskell.com/blog/2017/5/15/untangling-haskells-strings">Untangling Haskell’s Strings — Monday Morning Haskell</a></li>
+</ul>
+    </section>
+</article>
+
+            </main>
+        </div>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
+    </body>
+</html>
