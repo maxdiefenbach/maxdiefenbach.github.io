@@ -58,28 +58,26 @@
         </div>
         <div class="content container">
             <main role="main">
-                <h1>Using jupyter remotely</h1>
+                <h1>Stop Mac OS's Finder to write .DS_Store files on Network drives</h1>
                 <article>
     <section class="header">
-        Posted on May 19, 2020
+        Posted on October 20, 2020
         
         <div class="info">
             
-            Tags: <a title="All pages tagged 'bash'." href="../posts/tags/bash.html">bash</a>, <a title="All pages tagged 'server'." href="../posts/tags/server.html">server</a>, <a title="All pages tagged 'jupyter'." href="../posts/tags/jupyter.html">jupyter</a>
+            Tags: <a title="All pages tagged 'mac'." href="../posts/tags/mac.html">mac</a>
             
         </div>
     </section>
     <br />
     <section>
-        <p>How to run jupyter notebooks on a server.</p>
-<h2 id="on-the-remote-machine">On the remote machine</h2>
-<p>Start jupyter with something like</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">jupyter-notebook</span> --no-browser <span class="op">&lt;</span>dir<span class="op">&gt;</span> <span class="kw">&amp;</span></span></code></pre></div>
-<p>By default this runs jupyter on port 8888</p>
-<h2 id="on-the-local-machine">On the local machine</h2>
-<p>ssh to the remote and forward the port 8888</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">ssh</span> -L 8888:localhost:8888 <span class="op">&lt;</span>user<span class="op">&gt;</span>@<span class="op">&lt;</span>host<span class="op">&gt;</span></span></code></pre></div>
-<p>Navigating in the browser to <code>localhost:8888</code> now let’s you use the remote jupyter locally.</p>
+        <p>The Finder file explorer on Mac OS writes .DS<sub>Store</sub> file in every directory you open with it. This is quite annoying on network shares.</p>
+<p>This behavior can be diabled by executing the following command in the terminal:</p>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">defaults</span> write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE</span></code></pre></div>
+<p>Obviously, to re-enable use:</p>
+<pre><code>defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool FALSE
+</code></pre>
+<p>src: <a href="https://www.techjunkie.com/stop-ds-store-files-mac-network/">https://www.techjunkie.com/stop-ds-store-files-mac-network/</a></p>
     </section>
 </article>
 
