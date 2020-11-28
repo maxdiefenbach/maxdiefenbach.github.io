@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Personal Website" />
+        <meta name="author" content="Max Diefenbach" />
+        <title>Max Diefenbach</title>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/a81715ae5b.js" crossorigin="anonymous"></script>
+        <link href="../css/styles.css" rel="stylesheet" />
+        <link href="../css/codeblock.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="container ">
+                <div class="sidebar-about">
+                    <div class="site__title">
+                        <a href="../">Max Diefenbach</a>
+                    </div>
+                    <div class="author-image">
+                        <a href="../">
+                            <img src="https://www.gravatar.com/avatar/cf1c28d916585358f56b58cb7cb7bf2b?s=240&d=mp" class="img--circle img--headshot element--center" alt="gravatar">
+                        </a>
+                    </div>
+                    <div class="section__social">
+                        <section class="social">
+	                          <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/diefenbach_max"><i class="fa fa-twitter fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://linkedin.com/in/maxdiefenbach"><i class="fa fa-linkedin fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://github.com/maxdiefenbach"><i class="fa fa-github fa-lg"></i></a>
+                            <a target="_blank" rel="noopener noreferrer" href="https://orcid.org/0000-0002-5581-885X"><i class="fab fa-orcid fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://www.researchgate.net/profile/Maximilian_Diefenbach"><i class="fab fa-researchgate fa-lg"></i></a>
+                        </section>
+                    </div>
+                    <div class="site__description">
+                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                    </div>
+                </div>
+                <div class="collapsible-menu">
+                    <input type="checkbox" id="menuToggle">
+                    <label for="menuToggle">Max Diefenbach</label>
+                    <div class="menu-content">
+                        <ul class="sidebar-nav">
+                            <!-- <li><a href="/">Home</a></li> -->
+                            <li><a href="../pages/contact.html">Contact</a></li>
+                            <li><a href="../pages/research.html">Research</a></li>
+                            <li><a href="../pages/code.html">Code</a></li>
+                            <li><a href="../pages/posts.html">Posts</a></li>
+                            <li><a href="../pages/impressum.html" style="font-size:small;color:rgba(255,255,255,0.5);">Impressum</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="copyright">
+                    &copy; 2020 Max Diefenbach
+                </div>
+            </div>
+        </div>
+        <div class="content container">
+            <main role="main">
+                <h1>How to get the current Firefox tab</h1>
+                <article>
+    <section class="header">
+        Posted on November 28, 2020
+        
+        <div class="info">
+            
+            Tags: <a title="All pages tagged 'haskell'." href="../posts/tags/haskell.html">haskell</a>, <a title="All pages tagged 'emacs'." href="../posts/tags/emacs.html">emacs</a>
+            
+        </div>
+    </section>
+    <br />
+    <section>
+        <p>Here is a cli solution using Haskell to get the current tab opened in Firefox, which I run from emacs.</p>
+<h2 id="haskell">Haskell</h2>
+<p>The single input argument is the path of the <code>recovery.jsonlz4</code> file in Firefox’s profile folder, which is decompressed with the <code>lz4-hs</code> package and traversed using lenses from <code>lens-aeson</code>. Output is just the tab tile and url in two lines printed to stdout. The code can be found <a href="https://github.com/maxdiefenbach/fftabs">here</a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE OverloadedStrings   #-}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ot">{-# LANGUAGE ScopedTypeVariables #-}</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="kw">import</span>           <span class="dt">Codec.Lz4</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">import</span>           <span class="dt">Control.Lens</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="kw">import</span>           <span class="dt">Data.Aeson</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="kw">import</span>           <span class="dt">Data.Aeson.Lens</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="kw">import</span>           <span class="dt">Data.Bits</span>                      ( shiftL )</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Char8</span>         <span class="kw">as</span> <span class="dt">BC</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="kw">import</span>           <span class="dt">Data.Char</span>                      ( ord )</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a><span class="kw">import</span>           <span class="dt">System.Environment</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a><span class="kw">import</span>           <span class="dt">Data.Text.Lens</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a><span class="ot">readLz4 ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">BC.ByteString</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>readLz4 f <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>  contents <span class="ot">&lt;-</span> BC.readFile f</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>  <span class="kw">let</span> bsc <span class="ot">=</span> BC.drop <span class="dv">8</span> contents</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>      sz  <span class="ot">=</span> lEBsToInt <span class="op">$</span> BC.take <span class="dv">4</span> bsc</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>  <span class="fu">return</span> <span class="op">$</span> decompressBlockSz (BC.drop <span class="dv">4</span> bsc) sz</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a><span class="ot">readJsonLz4 ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Value</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>readJsonLz4 f <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a>  bs <span class="ot">&lt;-</span> readLz4 f</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a>  <span class="fu">return</span> <span class="op">$</span> bs <span class="op">^?!</span> _JSON</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a><span class="co">-- https://stackoverflow.com/questions/26519579/how-do-i-convert-4-bytes-of-a-bytestring-to-an-int</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a><span class="co">-- 1.  Get the first 4 bytes of a ByteString</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a><span class="co">-- 2.  Calculate the amount to shift by</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true"></a><span class="co">-- 3.  Fold over the ByteString, summing the result of shifting the current byte by the current offset</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true"></a><span class="ot">lEBsToInt ::</span> <span class="dt">BC.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="co">-- littleEndianByteStringToInt</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true"></a>lEBsToInt bs <span class="ot">=</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true"></a>  <span class="kw">let</span> bsI <span class="ot">=</span> BC.take <span class="dv">4</span> bs</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true"></a>  <span class="kw">in</span>  <span class="fu">fst</span> <span class="op">$</span> BC.foldl</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a>        (\(s, i) b <span class="ot">-&gt;</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a>          <span class="kw">let</span> shiftBy <span class="ot">=</span> i <span class="op">*</span> <span class="dv">8</span> <span class="kw">in</span> (s <span class="op">+</span> (<span class="fu">ord</span> b <span class="ot">`shiftL`</span> shiftBy), i <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true"></a>        )</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true"></a>        (<span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true"></a>        bsI</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true"></a><span class="ot">getCurrentTab ::</span> <span class="dt">Value</span> <span class="ot">-&gt;</span> (<span class="dt">String</span>, <span class="dt">String</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true"></a>getCurrentTab v <span class="ot">=</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true"></a>  <span class="kw">let</span> iwindow <span class="ot">=</span> v <span class="op">^?!</span> key <span class="st">&quot;selectedWindow&quot;</span> <span class="op">.</span> _Integer <span class="op">.</span> to <span class="fu">fromIntegral</span> <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true"></a>      window  <span class="ot">=</span> v <span class="op">^?!</span> key <span class="st">&quot;windows&quot;</span> <span class="op">.</span> nth iwindow</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true"></a>      itab    <span class="ot">=</span> window <span class="op">^?!</span> key <span class="st">&quot;selected&quot;</span> <span class="op">.</span> _Integer <span class="op">.</span> to <span class="fu">fromIntegral</span> <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true"></a>      tab     <span class="ot">=</span> window <span class="op">^?!</span> key <span class="st">&quot;tabs&quot;</span> <span class="op">.</span> nth itab</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true"></a>      ientry  <span class="ot">=</span> tab <span class="op">^?!</span> key <span class="st">&quot;index&quot;</span> <span class="op">.</span> _Integer <span class="op">.</span> to <span class="fu">fromIntegral</span> <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true"></a>  <span class="kw">in</span>  tab <span class="op">^?!</span> key <span class="st">&quot;entries&quot;</span> <span class="op">.</span> nth ientry <span class="op">.</span> to</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true"></a>        (\o <span class="ot">-&gt;</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true"></a>          ( o <span class="op">^?!</span> key <span class="st">&quot;title&quot;</span> <span class="op">.</span> _String <span class="op">.</span> unpacked</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true"></a>          , o <span class="op">^?!</span> key <span class="st">&quot;url&quot;</span> <span class="op">.</span> _String <span class="op">.</span> unpacked</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true"></a>          )</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true"></a>        )</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true"></a><span class="ot">extractCurrentTab ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">String</span>, <span class="dt">String</span>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true"></a>extractCurrentTab recoveryJson <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true"></a>  value <span class="ot">&lt;-</span> readJsonLz4 recoveryJson</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true"></a>  <span class="fu">return</span> <span class="op">$</span> getCurrentTab value</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true"></a><span class="ot">currentFirefoxTab ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true"></a>currentFirefoxTab recoveryJson <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true"></a>  (title, url) <span class="ot">&lt;-</span> extractCurrentTab recoveryJson</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true"></a>  <span class="fu">putStrLn</span> title</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true"></a>  <span class="fu">putStrLn</span> url</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true"></a>  [recoveryJson] <span class="ot">&lt;-</span> getArgs</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true"></a>  currentFirefoxTab recoveryJson</span></code></pre></div>
+<h2 id="firefox">Firefox</h2>
+<p>The path to firefox’s <code>recovery.jsonlz4</code> file:</p>
+<ul>
+<li>macos: <code>"~/Library/Application Support/Firefox/Profiles/*.default-*/sessionstore-backups/recovery.jsonlz4"</code></li>
+<li>linux: <code>"~/.mozilla/firefox*/*.default/sessionstore-backups/recovery.jsonlz4"</code></li>
+</ul>
+<h2 id="emacs">Emacs</h2>
+<p>I wrote <code>fftabs</code> to be used in my doom emacs config to insert the tab in a buffer or open it in eww. Here are some elisp function to achieve this:</p>
+<div class="sourceCode" id="cb2" data-org-language="emacs-lisp"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co">;; Use Firefox Tabs</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>(<span class="kw">defvar</span><span class="fu"> mnd/ff-restore-file</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  <span class="st">&quot;/Users/mnd/Library/Application</span><span class="sc">\\</span><span class="st"> Support/Firefox/Profiles/\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="st">&lt;FILLHERE&gt;.default-&lt;FILLHERE&gt;/sessionstore-backups/recovery.jsonlz4&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>(<span class="kw">defun</span><span class="fu"> mnd/current-firefox-tab </span>()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>  <span class="st">&quot;Run fftabs haskell programm to get the current firefox tab.&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>  (s-split <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>           (shell-command-to-string</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>            (<span class="kw">format</span> <span class="st">&quot;fftabs %s&quot;</span> mnd/ff-restore-file))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>           'omit-nulls))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>(<span class="kw">defun</span><span class="fu"> mnd/current-firefox-tab-url </span>()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>  <span class="st">&quot;Insert the url of the current firefox tab.&quot;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>  (interactive)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>  (<span class="kw">let*</span> ((pair (mnd/current-firefox-tab))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>         (url (<span class="kw">cadr</span> pair)))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    (insert url)))</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>(map! :leader <span class="st">&quot;i w u&quot;</span> #'mnd/current-firefox-tab-url)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>(<span class="kw">defun</span><span class="fu"> mnd/current-firefox-tab-orglink </span>()</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>  <span class="st">&quot;Get the current firefox tab in titled org-link format.&quot;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>  (<span class="kw">let*</span> ((pair (mnd/current-firefox-tab))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>         (title (<span class="kw">car</span> pair))</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>         (url (<span class="kw">cadr</span> pair))</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>         (orglink (<span class="kw">format</span> <span class="st">&quot;[[%s][%s]]&quot;</span> url title)))</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a>    (message <span class="st">&quot;%s&quot;</span> orglink)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>    orglink))</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a>(<span class="kw">defun</span><span class="fu"> mnd/current-firefox-tab-org-cliplink </span>()</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>  <span class="st">&quot;Insert the current firefox tab in titled org-link format.&quot;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>  (interactive)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a>  (insert (mnd/current-firefox-tab-orglink))</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a>  (evil-jump-item))</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a>(map! :leader <span class="st">&quot;i w o&quot;</span> #'mnd/current-firefox-tab-org-cliplink)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a>(<span class="kw">defun</span><span class="fu"> mnd/current-firefox-tab-eww </span>()</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a>  <span class="st">&quot;Open the current firefox tab in eww.&quot;</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>  (interactive)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a>  (<span class="kw">let*</span> ((pair (mnd/current-firefox-tab))</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a>         (url (<span class="kw">cadr</span> pair)))</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>    (eww url)))</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a>(map! :leader <span class="st">&quot;o w&quot;</span> #'mnd/current-firefox-tab-eww)</span></code></pre></div>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://unix.stackexchange.com/questions/385023/firefox-reading-out-urls-of-opened-tabs-from-the-command-line">https://unix.stackexchange.com/questions/385023/firefox-reading-out-urls-of-opened-tabs-from-the-command-line</a></li>
+</ul>
+    </section>
+</article>
+
+            </main>
+        </div>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
+    </body>
+</html>
