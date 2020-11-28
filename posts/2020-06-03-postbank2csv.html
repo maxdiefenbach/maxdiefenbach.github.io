@@ -58,94 +58,25 @@
         </div>
         <div class="content container">
             <main role="main">
-                <h1>Posts</h1>
-                <ul>
-    
-        <li>
-            <a href="../posts/2020-11-28-firefox_tabs.html">How to get the current Firefox tab</a> - November 28, 2020
-        </li>
-    
-        <li>
-            <a href="../posts/2020-10-20-macos_no_dsstore.html">Stop Mac OS's Finder to write .DS_Store files on Network drives</a> - October 20, 2020
-        </li>
-    
-        <li>
-            <a href="../posts/2020-08-20-anaconda.html">How to install anaconda on an Ubuntu server</a> - August 20, 2020
-        </li>
-    
-        <li>
-            <a href="../posts/2020-06-03-postbank2csv.html">Haskell cli tool to convert Postbank pdf banking statements to csv</a> - June  3, 2020
-        </li>
-    
-        <li>
-            <a href="../posts/2020-05-19-remote_jupyter.html">Using jupyter remotely</a> - May 19, 2020
-        </li>
-    
-        <li>
-            <a href="../posts/2020-01-24-haskell_strings.html">How to convert String/Text/ByteString in Haskell</a> - January 24, 2020
-        </li>
-    
-        <li>
-            <a href="../posts/2020-01-08-docker_rm.html">How to kill all docker containers</a> - January  8, 2020
-        </li>
-    
-        <li>
-            <a href="../posts/2020-01-03-ubuntu_user_mgmt.html">Basic user management in Ubuntu</a> - January  3, 2020
-        </li>
-    
-        <li>
-            <a href="../posts/2018-11-20-just-another-post.html">This is just another post ...</a> - November 20, 2018
-        </li>
-    
-        <li>
-            <a href="../posts/2018-11-17-how-to-irc.html">How to connect to an IRC channel</a> - November 17, 2018
-        </li>
-    
-        <li>
-            <a href="../posts/2018-11-16-how_to_display_depatures_for_mvg_stations_in_emacs.html">How to display departures for MVG stations in Emacs</a> - November 16, 2018
-        </li>
-    
-        <li>
-            <a href="../posts/2018-11-14-how_to_display_world_clock_in_emacs.html">How to display world clock in Emacs</a> - November 14, 2018
-        </li>
-    
-        <li>
-            <a href="../posts/2018-11-01-how-to-mount-a-samba-nas-from-the-commandline-in-osx.html">How to mount a samba NAS from the commandline in OSX</a> - November  1, 2018
-        </li>
-    
-        <li>
-            <a href="../posts/2018-02-13-mrseqdia.html">mrseqdia – latex package to create MR sequence diagrams</a> - February 13, 2018
-        </li>
-    
-        <li>
-            <a href="../posts/2017-12-28-emacs-eshell.html">Switching to emacs eshell</a> - December 28, 2017
-        </li>
-    
-        <li>
-            <a href="../posts/2017-10-05-eps2pdf.html">How to convert a pdf to eps and other image formats</a> - October  5, 2017
-        </li>
-    
-        <li>
-            <a href="../posts/2017-08-01-compress_pdf.html">How to compress pdfs</a> - August  1, 2017
-        </li>
-    
-        <li>
-            <a href="../posts/2017-03-22-org_table_move_cell.html">How to move a single cell in an org-table</a> - March 22, 2017
-        </li>
-    
-        <li>
-            <a href="../posts/2017-02-10-bash_loop.html">How to process several files with a bash for loop</a> - February 10, 2017
-        </li>
-    
-        <li>
-            <a href="../posts/2016-10-05-citeISMRM.html">How to automatically create bibtex entries for ISMRM abstracts</a> - October  5, 2016
-        </li>
-    
-        <li>
-            <a href="../posts/2016-08-03-searching.html">How to effetively search stuff on your computer, Part I</a> - August  3, 2016
-        </li>
-    
-</ul>
+                <h1>Haskell cli tool to convert Postbank pdf banking statements to csv</h1>
+                <article>
+    <section class="header">
+        Posted on June  3, 2020
+        
+        <div class="info">
+            
+            Tags: <a title="All pages tagged 'haskell'." href="../posts/tags/haskell.html">haskell</a>
+            
+        </div>
+    </section>
+    <br />
+    <section>
+        <p>I always wanted to use ledger to organize my finances. Unfortunately, for several years I only had banking statements in pdf format from my German “Postbank”. To import this data into ledger, I finally wrote a little Haskell parser to convert the pdfs into csv files.</p>
+<p>The code can be found at <a href="https://github.com/maxdiefenbach/postbank2csv">maxdiefenbach/postbank2csv: Convert Postbank statements from PDF to CSV format</a>.</p>
+<p>It basically just uses <code>pdftotext</code> to convert the pdf to txt and then parses the text with <code>megaparse</code> into record types. Finally, the records are written in csv structure with <code>cassava</code>.</p>
+<p>My workflow continues with importing the csv into <code>hledger</code> using csv import rules, that I try to describe in another post.</p>
+    </section>
+</article>
 
             </main>
         </div>
