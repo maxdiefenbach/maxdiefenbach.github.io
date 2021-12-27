@@ -34,7 +34,7 @@
                         </section>
                     </div>
                     <div class="site__description">
-                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
                     </div>
                 </div>
                 <div class="collapsible-menu">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    &copy; 2020 Max Diefenbach
+                    &copy; 2016--2021 Max Diefenbach
                 </div>
             </div>
         </div>
@@ -71,18 +71,18 @@
     </section>
     <br />
     <section>
-        <p>Collection of commands to install the Anaconda Python distribution (version <code>Anaconda3-2020.07-Linux-x86_64</code>) on an Ubuntu 20.04 server</p>
+        <p>Collection of commands to install the Anaconda Python distribution (version <code class="verbatim">Anaconda3-2020.07-Linux-x86_64</code>) on an Ubuntu 20.04 server</p>
 <h2 id="install-the-convenience-script">Install the convenience script</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">curl</span> -O https://repo.anaconda.com/archive/Anaconda3-2020.07-Linux-x86_64.sh</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">md5sum</span> Anaconda3-2020.07-Linux-x86_64.sh</span></code></pre></div>
-<p>in the install process you get asked for the path to the installation folder. I usually pick <code>/usr/local/bin/anaconda3</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-O</span> https://repo.anaconda.com/archive/Anaconda3-2020.07-Linux-x86_64.sh</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">md5sum</span> Anaconda3-2020.07-Linux-x86_64.sh</span></code></pre></div>
+<p>in the install process you get asked for the path to the installation folder. I usually pick <code class="verbatim">/usr/local/bin/anaconda3</code>.</p>
 <h2 id="create-group-to-manage-multi-user-usage">Create group to manage multi user usage</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">sudo</span> groupadd anaconda</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="fu">sudo</span> chgrp -R anaconda /usr/local/bin/anaconda3</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="fu">sudo</span> chmod g+s -R anaconda3/</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd anaconda</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chgrp <span class="at">-R</span> anaconda /usr/local/bin/anaconda3</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod g+s <span class="at">-R</span> anaconda3/</span></code></pre></div>
 <h2 id="add-anaconda-to-the-path">Add anaconda to the path</h2>
 <p>use something like</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;export PATH=/usr/local/bin/anaconda3/bin/:</span><span class="dt">\$</span><span class="st">PATH&quot;</span> <span class="op">&gt;&gt;</span> .bashrc.d/path.bash</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;export PATH=/usr/local/bin/anaconda3/bin/:</span><span class="dt">\$</span><span class="st">PATH&quot;</span> <span class="op">&gt;&gt;</span> .bashrc.d/path.bash</span></code></pre></div>
     </section>
 </article>
 

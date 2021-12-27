@@ -34,7 +34,7 @@
                         </section>
                     </div>
                     <div class="site__description">
-                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
                     </div>
                 </div>
                 <div class="collapsible-menu">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    &copy; 2020 Max Diefenbach
+                    &copy; 2016--2021 Max Diefenbach
                 </div>
             </div>
         </div>
@@ -71,23 +71,23 @@
     </section>
     <br />
     <section>
-        <p>Often when I prepare pdfs for an application or scan documents to finally sent to someone by email, I need to reduce the file sizes. Here is an easy command using <code>ghostscript</code> to achieve pdf compression:</p>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">gs</span> -sDEVICE=pdfwrite <span class="kw">\</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>   <span class="ex">-dCompatibilityLevel</span>=1.4 <span class="kw">\</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>   <span class="ex">-dPDFSETTINGS</span>=/printer <span class="kw">\</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>   <span class="ex">-dNOPAUSE</span> <span class="kw">\</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>   <span class="ex">-dQUIET</span> <span class="kw">\</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>   <span class="ex">-dBATCH</span> <span class="kw">\</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>   <span class="ex">-sOutputFile</span>=<span class="op">&lt;</span>output.pdf<span class="op">&gt;</span> <span class="op">&lt;</span>input.pdf<span class="op">&gt;</span></span></code></pre></div>
+        <p>Often when I prepare pdfs for an application or scan documents to finally sent to someone by email, I need to reduce the file sizes. Here is an easy command using <code class="verbatim">ghostscript</code> to achieve pdf compression:</p>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gs</span> <span class="at">-sDEVICE</span><span class="op">=</span>pdfwrite <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">-dCompatibilityLevel</span><span class="op">=</span>1.4 <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">-dPDFSETTINGS</span><span class="op">=</span>/printer <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">-dNOPAUSE</span> <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>   <span class="at">-dQUIET</span> <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   <span class="at">-dBATCH</span> <span class="dt">\</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>   <span class="at">-sOutputFile</span><span class="op">=&lt;</span>output.pdf<span class="op">&gt;</span> <span class="op">&lt;</span>input.pdf<span class="op">&gt;</span></span></code></pre></div>
 <p>The final quality of the output pdf can by changed with the options:</p>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="va">dPDFSETTINGS=</span>/screen            # <span class="kw">(</span><span class="ex">screen-view-only</span> quality, 72 dpi images<span class="kw">)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="va">dPDFSETTINGS=</span>/ebook             # <span class="kw">(</span><span class="ex">low</span> quality, 150 dpi images<span class="kw">)</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="va">dPDFSETTINGS=</span>/printer           # <span class="kw">(</span><span class="ex">high</span> quality, 300 dpi images<span class="kw">)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="va">dPDFSETTINGS=</span>/prepress          # <span class="kw">(</span><span class="ex">high</span> quality, color preserving, 300 dpi imgs<span class="kw">)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="va">dPDFSETTINGS=</span>/default           # <span class="kw">(</span><span class="ex">almost</span> identical to /screen<span class="kw">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">dPDFSETTINGS</span><span class="op">=</span>/screen            <span class="co"># (screen-view-only quality, 72 dpi images)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">dPDFSETTINGS</span><span class="op">=</span>/ebook             <span class="co"># (low quality, 150 dpi images)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">dPDFSETTINGS</span><span class="op">=</span>/printer           <span class="co"># (high quality, 300 dpi images)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">dPDFSETTINGS</span><span class="op">=</span>/prepress          <span class="co"># (high quality, color preserving, 300 dpi imgs)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">dPDFSETTINGS</span><span class="op">=</span>/default           <span class="co"># (almost identical to /screen)</span></span></code></pre></div>
 <p>source: <a href="http://milan.kupcevic.net/ghostscript-ps-pdf/">http://milan.kupcevic.net/ghostscript-ps-pdf/</a></p>
 <p>Similarly one could use imagemagick with this oneliner:</p>
-<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">convert</span> -units PixelsPerInch <span class="op">&lt;</span>input.pdf<span class="op">&gt;</span> -density 300 <span class="op">&lt;</span>output.pdf<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">convert</span> <span class="at">-units</span> PixelsPerInch <span class="op">&lt;</span>input.pdf<span class="op">&gt;</span> -density 300 <span class="op">&lt;</span>output.pdf<span class="op">&gt;</span></span></code></pre></div>
     </section>
 </article>
 

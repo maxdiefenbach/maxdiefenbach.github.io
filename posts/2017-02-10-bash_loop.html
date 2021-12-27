@@ -34,7 +34,7 @@
                         </section>
                     </div>
                     <div class="site__description">
-                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
                     </div>
                 </div>
                 <div class="collapsible-menu">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    &copy; 2020 Max Diefenbach
+                    &copy; 2016--2021 Max Diefenbach
                 </div>
             </div>
         </div>
@@ -73,14 +73,14 @@
     <section>
         <p>A quick example of a bash for loop to process files.</p>
 <p>Here is a stupid artificial example on how to run a bash for loop on all .tex files and output their filenames with changed file extensions .pdf. The lines starting with echo show three different ways to change the filename string.</p>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">for</span> <span class="ex">i</span> in <span class="va">$(</span><span class="fu">ls</span> *.tex<span class="va">)</span><span class="kw">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">do</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">${i%</span>.tex<span class="va">}</span><span class="st">.pdf&quot;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">${i/</span>.tex<span class="va">/</span>.pdf<span class="va">}</span><span class="st">&quot;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="va">$(</span><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> s/.tex/.pdf/<span class="va">)</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="kw">done</span></span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">ls</span> <span class="pp">*</span>.tex<span class="va">)</span><span class="kw">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">${i</span><span class="op">%</span>.tex<span class="va">}</span><span class="st">.pdf&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">${i</span><span class="op">/</span><span class="ss">.tex</span><span class="op">/</span>.pdf<span class="va">}</span><span class="st">&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="va">$(</span><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> s/.tex/.pdf/<span class="va">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
 <p>It might be handy to rename and/or convert certain file types. For recursive listing one could use the glob star ‘**/*.tex’ (in case of the installed package or zsh) or l</p>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">find</span> . -name <span class="st">&quot;*.tex&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">&quot;*.tex&quot;</span></span></code></pre></div>
     </section>
 </article>
 

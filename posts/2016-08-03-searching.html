@@ -34,7 +34,7 @@
                         </section>
                     </div>
                     <div class="site__description">
-                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
                     </div>
                 </div>
                 <div class="collapsible-menu">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    &copy; 2020 Max Diefenbach
+                    &copy; 2016--2021 Max Diefenbach
                 </div>
             </div>
         </div>
@@ -73,90 +73,90 @@
     <section>
         <p>First part of a series (I plan to write) with a brief overview about how to search different things on the computer. This post focuses on how to search files on disk and regular expressions (regexp) in files.</p>
 <h2 id="finding-files-on-your-computer">Finding files on your computer</h2>
-<p>Many time you need to find files on the computer disk. In the terminal one can use <code>find</code> or <code>locate=</code> or similiar tool. Another frequent usecase is to list and filter files in e.g. matlab or python code.</p>
-<h3 id="ls"><code>ls</code></h3>
+<p>Many time you need to find files on the computer disk. In the terminal one can use <code class="verbatim">find</code> or <code class="verbatim">locate=</code> or similiar tool. Another frequent usecase is to list and filter files in e.g. matlab or python code.</p>
+<h3 id="ls"><code class="verbatim">ls</code></h3>
 <p>A simple way to filter out some files is with shell wildcards/globbing, e.g.</p>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">ls</span> *.pdf</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">ls</span> **/*.pdf</span></code></pre></div>
-<h3 id="find"><code>find</code></h3>
-<p>The goto tool is <code>find</code>, which searches files recursively in all subdirectories. To search for a certain file name, you just have to input a directory and a regexp.</p>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -name <span class="op">&lt;</span>regexp<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>.pdf</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">**</span>/<span class="pp">*</span>.pdf</span></code></pre></div>
+<h3 id="find"><code class="verbatim">find</code></h3>
+<p>The goto tool is <code class="verbatim">find</code>, which searches files recursively in all subdirectories. To search for a certain file name, you just have to input a directory and a regexp.</p>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -name <span class="op">&lt;</span>regexp<span class="op">&gt;</span></span></code></pre></div>
 <p>for example:</p>
-<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">find</span> . -name <span class="st">&quot;*.txt&quot;</span>            # searches all txt files in the current working directory <span class="st">&quot;.&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">&quot;*.txt&quot;</span>            <span class="co"># searches all txt files in the current working directory &quot;.&quot;</span></span></code></pre></div>
 <p>There are many filter you can search for as well. Here are some:</p>
-<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -iname <span class="op">&lt;</span>pattern<span class="op">&gt;</span>     # ignore case</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -atime 1             # access time: last time file was opened, exacly one day ago</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -mtime -7            # modification time: last time file was modified, less than a week ago</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -ctime +31           # change time: last time a file<span class="st">'s meta-data changed, more than 31 days ago</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="st"># same as atime, mtime, ctime but with minutes as unit</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -amin 1</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -mmin -7</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -cmin +31</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -anewer &lt;file&gt;        # newer in access time (in days) as file</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -mnewer &lt;file&gt;        # same for modification time</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -cnewer &lt;file&gt;        # same for change time</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -newermt &quot;date&quot;       # modification time today</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -newermt &quot;yyyy-mm-dd&quot; # modification &quot;yyyy-mm-dd&quot;</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -type f              # file</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -type d              # directory</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -type l              # link</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -size 50k            # file size exacly 50 KB</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -size -3M            # file size less than 3 MB</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -size +4G            # file size more than 4 GB</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -user &lt;user&gt;         # file belongs to user</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -group &lt;groupname&gt;   # file belongs to group</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -perm 755            # file permission ocal number</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true"></a></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -maxdepth 3          # maximal subdirectory depth</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true"></a><span class="st">find &lt;dir&gt; -maxdepth 2          # minimum subdirectory depth</span></span></code></pre></div>
-<h3 id="locate"><code>locate</code></h3>
-<p><code>locate</code> is another tool to find files, which is a bit faster (because it uses some sort of database of all files on the file system). If you only look for files by name you can use</p>
-<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">locate</span> <span class="op">&lt;</span>file<span class="op">&gt;</span></span></code></pre></div>
-<h3 id="pythons-os.walk">python’s <code>os.walk</code></h3>
-<p>Most often I use <code>os.walk</code> in a list comprehension to first list desired files to later loop over them. Here is a simple example</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="im">import</span> os</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>datadir <span class="op">=</span> <span class="st">'path/to/data/files'</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>files <span class="op">=</span> [os.path.join(r, f) <span class="cf">for</span> f, d, fs <span class="kw">in</span> os.walk(datadir)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>         <span class="cf">for</span> f <span class="kw">in</span> fs</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>         <span class="cf">if</span> f.endswith(<span class="st">'.nii'</span>)]  <span class="co"># find all nifti files recursively</span></span></code></pre></div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -iname <span class="op">&lt;</span>pattern<span class="op">&gt;</span>     # ignore case</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -atime 1             <span class="co"># access time: last time file was opened, exacly one day ago</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -mtime <span class="at">-7</span>            <span class="co"># modification time: last time file was modified, less than a week ago</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -ctime +31           <span class="co"># change time: last time a file's meta-data changed, more than 31 days ago</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># same as atime, mtime, ctime but with minutes as unit</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -amin 1</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -mmin <span class="at">-7</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -cmin +31</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -anewer <span class="op">&lt;</span>file<span class="op">&gt;</span>        # newer in access time <span class="er">(in</span> <span class="ex">days</span><span class="kw">)</span> <span class="fu">as</span> file</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -mnewer <span class="op">&lt;</span>file<span class="op">&gt;</span>        # same for modification time</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -cnewer <span class="op">&lt;</span>file<span class="op">&gt;</span>        # same for change time</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -newermt <span class="st">&quot;date&quot;</span>       <span class="co"># modification time today</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -newermt <span class="st">&quot;yyyy-mm-dd&quot;</span> <span class="co"># modification &quot;yyyy-mm-dd&quot;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -type f              <span class="co"># file</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -type d              <span class="co"># directory</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -type l              <span class="co"># link</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -size 50k            <span class="co"># file size exacly 50 KB</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -size <span class="at">-3M</span>            <span class="co"># file size less than 3 MB</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -size +4G            <span class="co"># file size more than 4 GB</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -user <span class="op">&lt;</span>user<span class="op">&gt;</span>         # file belongs to user</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -group <span class="op">&lt;</span>groupname<span class="op">&gt;</span>   # file belongs to group</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -perm 755            <span class="co"># file permission ocal number</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -maxdepth 3          <span class="co"># maximal subdirectory depth</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> -maxdepth 2          <span class="co"># minimum subdirectory depth</span></span></code></pre></div>
+<h3 id="locate"><code class="verbatim">locate</code></h3>
+<p><code class="verbatim">locate</code> is another tool to find files, which is a bit faster (because it uses some sort of database of all files on the file system). If you only look for files by name you can use</p>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">locate</span> <span class="op">&lt;</span>file<span class="op">&gt;</span></span></code></pre></div>
+<h3 id="pythons-os.walk">python’s <code class="verbatim">os.walk</code></h3>
+<p>Most often I use <code class="verbatim">os.walk</code> in a list comprehension to first list desired files to later loop over them. Here is a simple example</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>datadir <span class="op">=</span> <span class="st">'path/to/data/files'</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> [os.path.join(r, f) <span class="cf">for</span> f, d, fs <span class="kw">in</span> os.walk(datadir)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         <span class="cf">for</span> f <span class="kw">in</span> fs</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         <span class="cf">if</span> f.endswith(<span class="st">'.nii'</span>)]  <span class="co"># find all nifti files recursively</span></span></code></pre></div>
 <p>and one with regular expression matching</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="im">import</span> os</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="im">import</span> re</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>datadir <span class="op">=</span> <span class="st">'path/to/data/files'</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>files <span class="op">=</span> [os.path.join(r, f) <span class="cf">for</span> f, d, fs <span class="kw">in</span> os.walk(datadir)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>         <span class="cf">for</span> f <span class="kw">in</span> fs</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>         <span class="cf">if</span> re.match(<span class="st">'&lt;regex&gt;'</span>, f)]  <span class="co"># find all files whose names match &lt;regex&gt;</span></span></code></pre></div>
-<h3 id="regexpdir-in-matlab"><code>regexpdir</code> in matlab</h3>
-<p>For the same usecase in matlab, I came across the package <a href="https://de.mathworks.com/matlabcentral/fileexchange/16216-regexpdir"><code>regexpdir</code></a>, which does the same as the above python code.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode matlab"><code class="sourceCode matlab"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="va">files</span> <span class="op">=</span> <span class="va">regexpdir</span>(<span class="va">datadir</span><span class="op">,</span> <span class="ss">'&lt;regexp&gt;'</span>)<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>datadir <span class="op">=</span> <span class="st">'path/to/data/files'</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> [os.path.join(r, f) <span class="cf">for</span> f, d, fs <span class="kw">in</span> os.walk(datadir)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>         <span class="cf">for</span> f <span class="kw">in</span> fs</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>         <span class="cf">if</span> re.match(<span class="st">'&lt;regex&gt;'</span>, f)]  <span class="co"># find all files whose names match &lt;regex&gt;</span></span></code></pre></div>
+<h3 id="regexpdir-in-matlab"><code class="verbatim">regexpdir</code> in matlab</h3>
+<p>For the same usecase in matlab, I came across the package <a href="https://de.mathworks.com/matlabcentral/fileexchange/16216-regexpdir"><code class="verbatim">regexpdir</code></a>, which does the same as the above python code.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode matlab"><code class="sourceCode matlab"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">files</span> <span class="op">=</span> <span class="va">regexpdir</span>(<span class="va">datadir</span><span class="op">,</span> <span class="ss">'&lt;regexp&gt;'</span>)<span class="op">;</span></span></code></pre></div>
 <h2 id="finding-regular-expressions-in-files">Finding regular expressions in files</h2>
-<p>Given the task to find a string in some files the normal goto tool is <code>grep</code> and its derivatives.</p>
-<h3 id="grep"><code>grep</code></h3>
+<p>Given the task to find a string in some files the normal goto tool is <code class="verbatim">grep</code> and its derivatives.</p>
+<h3 id="grep"><code class="verbatim">grep</code></h3>
 <p>To find a specific pattern in a text file, grep is the tool of choice. Just enter the desired pattern and the file(s).</p>
-<div class="sourceCode" id="cb9" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="fu">grep</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>file1<span class="op">&gt;</span> <span class="op">&lt;</span>file2<span class="op">&gt;</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb9" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>file1<span class="op">&gt;</span> <span class="op">&lt;</span>file2<span class="op">&gt;</span> ...</span></code></pre></div>
 <p>To use it with a proper regexp its</p>
-<div class="sourceCode" id="cb10" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="fu">grep</span> -e <span class="op">&lt;</span>regexp<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb10" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-e</span> <span class="op">&lt;</span>regexp<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span></span></code></pre></div>
 <p>and there are many options (see “$ man grep”), here are some I use more often:</p>
-<div class="sourceCode" id="cb11" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="fu">grep</span> -o <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>file<span class="op">&gt;</span>        # only show matching parts instead of lines</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="fu">grep</span> -n <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span>       # show line numbers</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="fu">grep</span> -i <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span>       # ignore case</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="fu">grep</span> -I <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span>       # ignore binary files</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="fu">grep</span> -r <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>directory<span class="op">&gt;</span>   # recursively search in directory</span></code></pre></div>
-<p>There are also two other derivates of the grep tool that I always mix up: <code>egrep</code> and <code>fgrep</code>. Apparently <code>fgrep</code> is faster but can only search for fixed patterns and <code>egrep</code> is like</p>
-<div class="sourceCode" id="cb12" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="fu">grep</span> -E <span class="op">&lt;</span>regexp<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb11" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-o</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>file<span class="op">&gt;</span>        # only show matching parts instead of lines</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-n</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span>       # show line numbers</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-i</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span>       # ignore case</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-I</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span>       # ignore binary files</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-r</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>directory<span class="op">&gt;</span>   # recursively search in directory</span></code></pre></div>
+<p>There are also two other derivates of the grep tool that I always mix up: <code class="verbatim">egrep</code> and <code class="verbatim">fgrep</code>. Apparently <code class="verbatim">fgrep</code> is faster but can only search for fixed patterns and <code class="verbatim">egrep</code> is like</p>
+<div class="sourceCode" id="cb12" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-E</span> <span class="op">&lt;</span>regexp<span class="op">&gt;</span> <span class="op">&lt;</span>files<span class="op">&gt;</span></span></code></pre></div>
 <p>which handles extended regular expressions, something like (see “$ man re<sub>format</sub>”). The differences between the base grep, egrep, and fgrep are described here: <a href="http://www.differencebetween.net/technology/difference-between-egrep-and-fgrep/#ixzz3XrnuGRJj">Difference Between Egrep and Fgrep | Difference Between</a></p>
-<h3 id="ag-the-silver-searcher"><code>ag</code> (the silver searcher)</h3>
+<h3 id="ag-the-silver-searcher"><code class="verbatim">ag</code> (the silver searcher)</h3>
 <p>Another tool very similiar to grep is <em>the silver searcher</em>. To search a whole path one needs to type:</p>
-<div class="sourceCode" id="cb13" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="ex">ag</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span></span></code></pre></div>
-<p>Available options are almost the same as for <code>grep</code>, but <em>ag</em> is much faster, especially for large project directories, because <code>ag</code> is smart and neglects files in e.g. “.gitignore” and can run several threads (<a href="https://github.com/ggreer/the_silver_searcher">GitHub - ggreer/the<sub>silversearcher</sub>: A code-searching tool similar to ack, bu…</a>).</p>
+<div class="sourceCode" id="cb13" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ag</span> <span class="op">&lt;</span>pattern<span class="op">&gt;</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span></span></code></pre></div>
+<p>Available options are almost the same as for <code class="verbatim">grep</code>, but <em>ag</em> is much faster, especially for large project directories, because <code class="verbatim">ag</code> is smart and neglects files in e.g. “.gitignore” and can run several threads (<a href="https://github.com/ggreer/the_silver_searcher">GitHub - ggreer/the<sub>silversearcher</sub>: A code-searching tool similar to ack, bu…</a>).</p>
 <h2 id="to-be-continued"><span class="todo TODO">TODO</span> To be continued …</h2>
 <p>Next I try to cover how to search stuff in git repositories.</p>
     </section>

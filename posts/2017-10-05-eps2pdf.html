@@ -34,7 +34,7 @@
                         </section>
                     </div>
                     <div class="site__description">
-                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
                     </div>
                 </div>
                 <div class="collapsible-menu">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    &copy; 2020 Max Diefenbach
+                    &copy; 2016--2021 Max Diefenbach
                 </div>
             </div>
         </div>
@@ -74,14 +74,14 @@
         <p>The journal <a href="http://onlinelibrary.wiley.com/journal/10.1002/(ISSN)1522-2594">MRM</a> required me to upload figures in eps format instead of pdf. Therefore, I needed to convert my pdfs to eps. I found two different ways:</p>
 <ul>
 <li><p>Method 1</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">pdf2ps</span> input.pdf</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">ps2eps</span> input.ps</span></code></pre></div></li>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pdf2ps</span> input.pdf</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ps2eps</span> input.ps</span></code></pre></div></li>
 <li><p>Method 2</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">pdftops</span> -eps input.pdf</span></code></pre></div></li>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pdftops</span> <span class="at">-eps</span> input.pdf</span></code></pre></div></li>
 </ul>
-<p>Both methods create <em>input.eps</em>. Apparently method 2 with <code>pdftops</code> has several advantages, see <a href="http://stefaanlippens.net/pdf2ps_vs_pdftops/">here</a>.</p>
-<p>To convert a pdf to other formats there is <a href="http://www.imagemagick.org"><code>imagemagick</code></a>, which offers the simple command</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">convert</span> input.pdf output.[png<span class="kw">|</span><span class="ex">jpg</span>]</span></code></pre></div>
+<p>Both methods create <em>input.eps</em>. Apparently method 2 with <code class="verbatim">pdftops</code> has several advantages, see <a href="http://stefaanlippens.net/pdf2ps_vs_pdftops/">here</a>.</p>
+<p>To convert a pdf to other formats there is <a href="http://www.imagemagick.org"><code class="verbatim">imagemagick</code></a>, which offers the simple command</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">convert</span> input.pdf output.[png<span class="kw">|</span><span class="ex">jpg]</span></span></code></pre></div>
 <p>with many possible options, e.g.:</p>
 <ul>
 <li>“-density 300”, which sets the dpi</li>

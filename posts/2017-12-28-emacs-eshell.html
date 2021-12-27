@@ -34,7 +34,7 @@
                         </section>
                     </div>
                     <div class="site__description">
-                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
                     </div>
                 </div>
                 <div class="collapsible-menu">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    &copy; 2020 Max Diefenbach
+                    &copy; 2016--2021 Max Diefenbach
                 </div>
             </div>
         </div>
@@ -71,10 +71,10 @@
     </section>
     <br />
     <section>
-        <p>Using a terminal inside emacs never felt completely convenient to me. I remember trying packages like <code>multi-term</code>, <code>better-shell</code>, and <code>shell-pop</code>. There was always something I disliked, e.g. colors, input modes, or the absence of tab functionality. In an external terminal I, however, missed all the emacs keybindings. I have tried <code>eshell</code> before, but didn’t get the idea and quickly stopped using it.</p>
+        <p>Using a terminal inside emacs never felt completely convenient to me. I remember trying packages like <code class="verbatim">multi-term</code>, <code class="verbatim">better-shell</code>, and <code class="verbatim">shell-pop</code>. There was always something I disliked, e.g. colors, input modes, or the absence of tab functionality. In an external terminal I, however, missed all the emacs keybindings. I have tried <code class="verbatim">eshell</code> before, but didn’t get the idea and quickly stopped using it.</p>
 <p>After watching Howard Abraham’s video <a href="https://www.youtube.com/watch?v=RhYNu6i_uY4&amp;feature=youtu.be">Introduction to EShell - YouTube</a> I reread his articles <a href="http://www.howardism.org/Technical/Emacs/eshell-fun.html">Eschewing Zshell for Emacs Shell</a> and <a href="http://howardism.org/Technical/Emacs/eshell-present.html">Presenting the Eshell</a> and I started to use eshell again.</p>
 <p>I especially like eshell’s for-loop in combination with the “modifiers”. (M-x eshell-display-modifier-help), with which you can do something like</p>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">for</span> <span class="ex">x</span> in ls *.org {concat <span class="va">$x</span>(:r) <span class="st">&quot;.&quot;</span> <span class="va">$x</span><span class="kw">(</span>:<span class="ex">e</span>:U<span class="kw">)</span>}</span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> ls <span class="pp">*</span>.org {concat <span class="va">$x</span><span class="er">(</span><span class="ex">:r</span><span class="kw">)</span> <span class="st">&quot;.&quot;</span> <span class="va">$x</span><span class="er">(</span><span class="ex">:e:U</span><span class="kw">)</span><span class="er">}</span></span></code></pre></div>
 <p>The eshell documentation is not totally complete, but Howard Abraham’s post got me quite far.</p>
 <p>There is still something I would very much like to have: the possibility to use eshell in an org-babel source block. Unfortunately, there is only the standard shell compatibility and I consider trying to implement eshell functionality myself. I know eshell converts the commands into the corresponding emacs-lisp code and executes this, so somewhere there should be a ready-to-use function for ob-eshell execution.</p>
     </section>

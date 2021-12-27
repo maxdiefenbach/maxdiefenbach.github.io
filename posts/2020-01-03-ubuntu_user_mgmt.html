@@ -34,7 +34,7 @@
                         </section>
                     </div>
                     <div class="site__description">
-                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
                     </div>
                 </div>
                 <div class="collapsible-menu">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    &copy; 2020 Max Diefenbach
+                    &copy; 2016--2021 Max Diefenbach
                 </div>
             </div>
         </div>
@@ -72,24 +72,26 @@
     <br />
     <section>
         <h2 id="list-all-users-on-the-system">List all users on the system</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">cut</span> -d: -f1 /etc/passwd</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-d:</span> <span class="at">-f1</span> /etc/passwd</span></code></pre></div>
 <p><a href="https://askubuntu.com/questions/410244/a-command-to-list-all-users-and-how-to-add-delete-modify-users">source</a></p>
 <h2 id="add-a-new-user">Add a new user</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">sudo</span> adduser <span class="op">&lt;</span>new_username<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> adduser <span class="op">&lt;</span>new_username<span class="op">&gt;</span></span></code></pre></div>
 <p>or:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">sudo</span> useradd <span class="op">&lt;</span>new_username<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> useradd <span class="op">&lt;</span>new_username<span class="op">&gt;</span></span></code></pre></div>
 <p>See also: <a href="https://askubuntu.com/questions/345974/what-is-the-difference-between-adduser-and-useradd">What is the difference between adduser and useradd?</a></p>
 <h2 id="remove-a-user">Remove a user</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">userdel</span> <span class="op">&lt;</span>username<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">userdel</span> <span class="op">&lt;</span>username<span class="op">&gt;</span></span></code></pre></div>
 <h2 id="change-username">Change username</h2>
 <p>To modify the username of a user:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">usermod</span> -l <span class="op">&lt;</span>new_username<span class="op">&gt;</span> <span class="op">&lt;</span>old_username<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">usermod</span> <span class="at">-l</span> <span class="op">&lt;</span>new_username<span class="op">&gt;</span> <span class="op">&lt;</span>old_username<span class="op">&gt;</span></span></code></pre></div>
 <h2 id="change-a-users-password">Change a user’s password</h2>
 <p>To change the password for a user:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="fu">sudo</span> passwd <span class="op">&lt;</span>username<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> passwd <span class="op">&lt;</span>username<span class="op">&gt;</span></span></code></pre></div>
+<h2 id="create-a-group">Create a group</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd <span class="op">&lt;</span>groupname<span class="op">&gt;</span></span></code></pre></div>
 <h2 id="add-a-user-to-a-group">Add a user to a group</h2>
 <p>To add a user to the sudo group:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ex">usermod</span> -aG sudo <span class="op">&lt;</span>username<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">usermod</span> <span class="at">-aG</span> sudo <span class="op">&lt;</span>username<span class="op">&gt;</span></span></code></pre></div>
     </section>
 </article>
 

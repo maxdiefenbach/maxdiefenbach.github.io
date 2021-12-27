@@ -34,7 +34,7 @@
                         </section>
                     </div>
                     <div class="site__description">
-                        <p>  MR physicist, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
                     </div>
                 </div>
                 <div class="collapsible-menu">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    &copy; 2020 Max Diefenbach
+                    &copy; 2016--2021 Max Diefenbach
                 </div>
             </div>
         </div>
@@ -74,12 +74,12 @@
         <p>How to run jupyter notebooks on a server.</p>
 <h2 id="on-the-remote-machine">On the remote machine</h2>
 <p>Start jupyter with something like</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">jupyter-notebook</span> --no-browser <span class="op">&lt;</span>dir<span class="op">&gt;</span> <span class="kw">&amp;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter-notebook</span> <span class="at">--no-browser</span> <span class="op">&lt;</span>dir<span class="op">&gt;</span> <span class="kw">&amp;</span></span></code></pre></div>
 <p>By default this runs jupyter on port 8888</p>
 <h2 id="on-the-local-machine">On the local machine</h2>
 <p>ssh to the remote and forward the port 8888</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">ssh</span> -L 8888:localhost:8888 <span class="op">&lt;</span>user<span class="op">&gt;</span>@<span class="op">&lt;</span>host<span class="op">&gt;</span></span></code></pre></div>
-<p>Navigating in the browser to <code>localhost:8888</code> now let’s you use the remote jupyter locally.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-L</span> 8888:localhost:8888 <span class="op">&lt;</span>user<span class="op">&gt;</span>@<span class="op">&lt;</span>host<span class="op">&gt;</span></span></code></pre></div>
+<p>Navigating in the browser to <code class="verbatim">localhost:8888</code> now let’s you use the remote jupyter locally.</p>
     </section>
 </article>
 
