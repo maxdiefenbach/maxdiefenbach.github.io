@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Personal Website" />
+        <meta name="author" content="Max Diefenbach" />
+        <title>Max Diefenbach</title>
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/a81715ae5b.js" crossorigin="anonymous"></script>
+        <link href="../css/styles.css" rel="stylesheet" />
+        <link href="../css/codeblock.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="container ">
+                <div class="sidebar-about">
+                    <div class="site__title">
+                        <a href="../">Max Diefenbach</a>
+                    </div>
+                    <div class="author-image">
+                        <a href="../">
+                            <img src="https://www.gravatar.com/avatar/cf1c28d916585358f56b58cb7cb7bf2b?s=240&d=mp" class="img--circle img--headshot element--center" alt="gravatar">
+                        </a>
+                    </div>
+                    <div class="section__social">
+                        <section class="social">
+	                          <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/diefenbach_max"><i class="fa fa-twitter fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://linkedin.com/in/maxdiefenbach"><i class="fa fa-linkedin fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://github.com/maxdiefenbach"><i class="fa fa-github fa-lg"></i></a>
+                            <a target="_blank" rel="noopener noreferrer" href="https://orcid.org/0000-0002-5581-885X"><i class="fab fa-orcid fa-lg"></i></a>
+	                          <a target="_blank" rel="noopener noreferrer" href="https://www.researchgate.net/profile/Maximilian_Diefenbach"><i class="fab fa-researchgate fa-lg"></i></a>
+                        </section>
+                    </div>
+                    <div class="site__description">
+                        <p>  System engineer, physicist, dev, Dr. rer. nat, emacs user, chess and ukulele player  </p>
+                    </div>
+                </div>
+                <div class="collapsible-menu">
+                    <input type="checkbox" id="menuToggle">
+                    <label for="menuToggle">Max Diefenbach</label>
+                    <div class="menu-content">
+                        <ul class="sidebar-nav">
+                            <!-- <li><a href="/">Home</a></li> -->
+                            <li><a href="../pages/contact.html">Contact</a></li>
+                            <li><a href="../pages/research.html">Research</a></li>
+                            <li><a href="../pages/code.html">Code</a></li>
+                            <li><a href="../pages/posts.html">Posts</a></li>
+                            <li><a href="../pages/impressum.html" style="font-size:small;color:rgba(255,255,255,0.5);">Impressum</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="copyright">
+                    &copy; 2016--2021 Max Diefenbach
+                </div>
+            </div>
+        </div>
+        <div class="content container">
+            <main role="main">
+                <h1>WIP: Functional Bloch simulations -- Part I</h1>
+                <article>
+    <section class="header">
+        Posted on December 29, 2021
+        
+        <div class="info">
+            
+            Tags: <a title="All pages tagged 'haskell'." href="../posts/tags/haskell.html">haskell</a>, <a title="All pages tagged 'mr'." href="../posts/tags/mr.html">mr</a>
+            
+        </div>
+    </section>
+    <br />
+    <section>
+        <p>WIP</p>
+<p>Abstract: <em>In this post we loosly follow <a href="https://mrsrl.stanford.edu/~brian/bloch/">(1)</a> and implement some of the Bloch simulations in Haskell using the State Monad. The <code class="verbatim">hvega</code> package using <code class="verbatim">vega-lite</code> specifications is employed to recreate some of the same plots.</em></p>
+<p>Keywords: <em>MR physics, Bloch equations, Pulse sequences, Haskell, StateMonad, vega-lite</em></p>
+<h3 id="preamble">Preamble</h3>
+<p>We add this header to later be able to easily run the code as a <a href="https://docs.haskellstack.org/en/stable/GUIDE/#writing-independent-and-reliable-scripts">script using <code class="verbatim">stack</code></a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#!/bin/env stack</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">{- stack</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">  script</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">  --resolver lts-18.19</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">  --package hmatrix</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">  --package lens</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">  --package mtl</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">  --package aeson</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">  --package hvega</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">-}</span></span></code></pre></div>
+<h3 id="imports">Imports</h3>
+<p>Language extensions and module imports.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE OverloadedStrings #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE TemplateHaskell #-}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Mag</span> <span class="kw">where</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Control.Lens</span>            <span class="kw">hiding</span> ( transform )</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Control.Monad.State.Lazy</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.Aeson</span>                     ( encodeFile )</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.Bifunctor</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Data.List.NonEmpty</span>             ( <span class="dt">NonEmpty</span>(..) )</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.List.NonEmpty</span>            <span class="kw">as</span> <span class="dt">Lne</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Graphics.Vega.VegaLite</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Numeric.LinearAlgebra</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span>           <span class="dt">Prelude</span>                 <span class="kw">hiding</span> ( (&lt;&gt;) )</span></code></pre></div>
+<h3 id="types">Types</h3>
+<p>We also add some type aliases to have kind of self-documenting type signatures.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Mag</span> <span class="ot">=</span> <span class="dt">Vector</span> <span class="dt">R</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">T1_s</span> <span class="ot">=</span> <span class="dt">Double</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">T2_s</span> <span class="ot">=</span> <span class="dt">Double</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Time_s</span> <span class="ot">=</span> <span class="dt">Double</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Freq_Hz</span> <span class="ot">=</span> <span class="dt">Double</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Angle_rad</span> <span class="ot">=</span> <span class="dt">Double</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Axis</span> <span class="ot">=</span> [<span class="dt">Double</span>]</span></code></pre></div>
+<p>The heart of the simulation is the state monad where the state (<code class="verbatim">NonEmpy BlochS</code>) is defined as a non-empty list of tuples of a time point and a 3d magnetization vector (<code class="verbatim">BlochS</code>). The state transformer (<code class="verbatim">BlochST</code>) accumulates (Bloch) tuples by consing to the head of the non-empty list. An MR pulse sequence is defined as a <code class="verbatim">BlochST</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">BlochS</span> <span class="ot">=</span> (<span class="dt">Time_s</span>, <span class="dt">Mag</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">BlochST</span> <span class="ot">=</span> <span class="dt">State</span> (<span class="dt">NonEmpty</span> <span class="dt">BlochS</span>) ()</span></code></pre></div>
+<h3 id="state-transformation">State transformation</h3>
+<p>To conveniently use the defined state monad <code class="verbatim">BlochST</code>, we define the following helper functions:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">initBlochS ::</span> <span class="dt">Time_s</span> <span class="ot">-&gt;</span> [<span class="dt">Double</span>] <span class="ot">-&gt;</span> <span class="dt">BlochS</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>initBlochS t es <span class="ot">=</span> (t, fromList es)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ot">updateBlochST ::</span> (<span class="dt">BlochS</span> <span class="ot">-&gt;</span> <span class="dt">BlochS</span>) <span class="ot">-&gt;</span> <span class="dt">BlochST</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>updateBlochST f <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  (s <span class="op">:|</span> _) <span class="ot">&lt;-</span> get</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  modify (Lne.cons (f s))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ot">runBlochST ::</span> <span class="dt">BlochST</span> <span class="ot">-&gt;</span> <span class="dt">BlochS</span> <span class="ot">-&gt;</span> ([<span class="dt">Time_s</span>], [<span class="dt">Mag</span>])</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>runBlochST st s0 <span class="ot">=</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unzip</span> <span class="op">$</span> (s0 <span class="op">:</span>) <span class="op">$</span> Lne.toList <span class="op">$</span> Lne.reverse <span class="op">$</span> execState st (s0 <span class="op">:|</span> [])</span></code></pre></div>
+<p>Once a pulse sequence is defined as a <code class="verbatim">BlochST</code>, <code class="verbatim">runBlochST</code> applies it to an initial <code class="verbatim">BlochS</code> and restructures the result in a time vs. magnetization format easier for later visulatization.</p>
+<h3 id="pulse-sequence-blocks">Pulse sequence blocks</h3>
+<p>Now we can define MR pulse sequences. The two basic building blocks are:</p>
+<ul>
+<li>instant pulses and</li>
+<li>the free induction decay (FID) over a specified time period</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>blockST</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  ::</span> <span class="dt">Axis</span> <span class="ot">-&gt;</span> <span class="dt">Angle_rad</span> <span class="ot">-&gt;</span> <span class="dt">Freq_Hz</span> <span class="ot">-&gt;</span> <span class="dt">T1_s</span> <span class="ot">-&gt;</span> <span class="dt">T2_s</span> <span class="ot">-&gt;</span> <span class="dt">Time_s</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BlochST</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>blockST ax th freq t1 t2 dt n <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  instPulseST ax th</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  fidST dt freq t1 t2 n</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ot">instPulseST ::</span> <span class="dt">Axis</span> <span class="ot">-&gt;</span> <span class="dt">Angle_rad</span> <span class="ot">-&gt;</span> <span class="dt">BlochST</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>instPulseST ax th <span class="ot">=</span> updateBlochST (second <span class="op">$</span> instPulseM (fromList ax) th)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ot">instPulseM ::</span> <span class="dt">Vector</span> <span class="dt">R</span> <span class="ot">-&gt;</span> <span class="dt">Angle_rad</span> <span class="ot">-&gt;</span> <span class="dt">Mag</span> <span class="ot">-&gt;</span> <span class="dt">Mag</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>instPulseM u th m <span class="ot">=</span> rot u th <span class="op">#&gt;</span> m</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="ot">fidST ::</span> <span class="dt">Time_s</span> <span class="ot">-&gt;</span> <span class="dt">Freq_Hz</span> <span class="ot">-&gt;</span> <span class="dt">T1_s</span> <span class="ot">-&gt;</span> <span class="dt">T2_s</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BlochST</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>fidST dt freq t1 t2 n <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> (precs, decay, b) <span class="ot">=</span> freeprecess dt freq t1 t2</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      a                 <span class="ot">=</span> precs <span class="op">&lt;&gt;</span> decay</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  replicateM_ n <span class="op">$</span> updateBlochST (bimap (<span class="op">+</span> dt) (\m <span class="ot">-&gt;</span> a <span class="op">#&gt;</span> m <span class="op">+</span> b))</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="ot">fidM ::</span> <span class="dt">Time_s</span> <span class="ot">-&gt;</span> <span class="dt">Freq_Hz</span> <span class="ot">-&gt;</span> <span class="dt">T1_s</span> <span class="ot">-&gt;</span> <span class="dt">T2_s</span> <span class="ot">-&gt;</span> <span class="dt">Mag</span> <span class="ot">-&gt;</span> <span class="dt">Mag</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>fidM dt freq t1 t2 m <span class="ot">=</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> (precs, decay, b) <span class="ot">=</span> freeprecess dt freq t1 t2</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>      a                 <span class="ot">=</span> precs <span class="op">&lt;&gt;</span> decay</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">in</span>  a <span class="op">#&gt;</span> m <span class="op">+</span> b</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="ot">freeprecessM ::</span> <span class="dt">Time_s</span> <span class="ot">-&gt;</span> <span class="dt">Freq_Hz</span> <span class="ot">-&gt;</span> <span class="dt">T1_s</span> <span class="ot">-&gt;</span> <span class="dt">T2_s</span> <span class="ot">-&gt;</span> <span class="dt">Mag</span> <span class="ot">-&gt;</span> <span class="dt">Mag</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>freeprecessM dt freq t1 t2 m <span class="ot">=</span> (precs <span class="op">&lt;&gt;</span> decay) <span class="op">#&gt;</span> m <span class="op">+</span> recov</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> (precs, decay, recov) <span class="ot">=</span> freeprecess dt freq t1 t2</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>freeprecess</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="ot">  ::</span> <span class="dt">Time_s</span> <span class="ot">-&gt;</span> <span class="dt">Freq_Hz</span> <span class="ot">-&gt;</span> <span class="dt">T1_s</span> <span class="ot">-&gt;</span> <span class="dt">T2_s</span> <span class="ot">-&gt;</span> (<span class="dt">Matrix</span> <span class="dt">R</span>, <span class="dt">Matrix</span> <span class="dt">R</span>, <span class="dt">Vector</span> <span class="dt">R</span>)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>freeprecess dt freq t1 t2 <span class="ot">=</span> (precs, decay, recov)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a> <span class="kw">where</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  e1    <span class="ot">=</span> <span class="fu">exp</span> <span class="op">$</span> <span class="op">-</span>dt <span class="op">/</span> t1</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  e2    <span class="ot">=</span> <span class="fu">exp</span> <span class="op">$</span> <span class="op">-</span>dt <span class="op">/</span> t2</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  decay <span class="ot">=</span> diagl [e2, e2, e1]</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  precs <span class="ot">=</span> precess dt [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>] freq</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  recov <span class="ot">=</span> fromList [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span> <span class="op">-</span> e1]</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="ot">precess ::</span> <span class="dt">Time_s</span> <span class="ot">-&gt;</span> <span class="dt">Axis</span> <span class="ot">-&gt;</span> <span class="dt">Freq_Hz</span> <span class="ot">-&gt;</span> <span class="dt">Matrix</span> <span class="dt">R</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>precess dt ax freq <span class="ot">=</span> rot (fromList ax) (<span class="dv">2</span> <span class="op">*</span> <span class="fu">pi</span> <span class="op">*</span> freq <span class="op">*</span> dt)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="ot">rot ::</span> <span class="dt">Vector</span> <span class="dt">R</span> <span class="ot">-&gt;</span> <span class="dt">Angle_rad</span> <span class="ot">-&gt;</span> <span class="dt">Matrix</span> <span class="dt">R</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>rot u th <span class="ot">=</span> scale c (ident <span class="dv">3</span>) <span class="op">+</span> scale (<span class="fu">sin</span> th) (crossProdMat u) <span class="op">+</span> scale</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  (<span class="dv">1</span> <span class="op">-</span> c)</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  (outer u u)</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span> c <span class="ot">=</span> <span class="fu">cos</span> th</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="ot">crossProdMat ::</span> <span class="dt">Vector</span> <span class="dt">R</span> <span class="ot">-&gt;</span> <span class="dt">Matrix</span> <span class="dt">R</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>crossProdMat v <span class="ot">=</span> fromColumns <span class="op">$</span> <span class="fu">map</span> (cross v) (toColumns <span class="op">$</span> ident <span class="dv">3</span>)</span></code></pre></div>
+<h3 id="plotting-functionality-using-vega-lite-via-hvega"><span class="todo TODO">TODO</span> Plotting functionality using <code class="verbatim">vega-lite</code> via <code class="verbatim">hvega</code></h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">plotComponents ::</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> [<span class="dt">PropertySpec</span>] <span class="ot">-&gt;</span> ([<span class="dt">Time_s</span>], [<span class="dt">Mag</span>]) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plotComponents fname props xs <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> vega <span class="ot">=</span> toVegaLite <span class="op">$</span> vlDataToPropSpecs (toVLData xs) <span class="op">++</span> props</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  encodeFile fname <span class="op">$</span> fromVL vega</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ot">toVLData ::</span> ([<span class="dt">Time_s</span>], [<span class="dt">Mag</span>]) <span class="ot">-&gt;</span> <span class="dt">Data</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>toVLData (ts, ms) <span class="ot">=</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  dataFromColumns []</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span> dataColumn <span class="st">&quot;time&quot;</span> (<span class="dt">Numbers</span> ts)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span> dataColumn <span class="st">&quot;M_x&quot;</span>  (<span class="dt">Numbers</span> mx)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span> dataColumn <span class="st">&quot;M_y&quot;</span>  (<span class="dt">Numbers</span> my)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span> dataColumn <span class="st">&quot;M_z&quot;</span>  (<span class="dt">Numbers</span> mz)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">$</span> []</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a> <span class="kw">where</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  mx <span class="ot">=</span> <span class="fu">map</span> (<span class="op">!</span> <span class="dv">0</span>) ms</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  my <span class="ot">=</span> <span class="fu">map</span> (<span class="op">!</span> <span class="dv">1</span>) ms</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  mz <span class="ot">=</span> <span class="fu">map</span> (<span class="op">!</span> <span class="dv">2</span>) ms</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="ot">vlDataToPropSpecs ::</span> <span class="dt">Data</span> <span class="ot">-&gt;</span> [<span class="dt">PropertySpec</span>]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>vlDataToPropSpecs dat <span class="ot">=</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  [ dat</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  , trans []</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  , mark <span class="dt">Line</span> [<span class="dt">MTooltip</span> <span class="dt">TTEncoding</span>, <span class="dt">MClip</span> <span class="dt">True</span>]</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  , enc []</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  , width <span class="dv">800</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  , height <span class="dv">450</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a> <span class="kw">where</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  trans <span class="ot">=</span> transform <span class="op">.</span> fold [<span class="st">&quot;M_x&quot;</span>, <span class="st">&quot;M_y&quot;</span>, <span class="st">&quot;M_z&quot;</span>]</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  enc <span class="ot">=</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    encoding</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span> position</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>          <span class="dt">X</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>          [ <span class="dt">PName</span> <span class="st">&quot;time&quot;</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>          , <span class="dt">PTitle</span> <span class="st">&quot;Time [s]&quot;</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>          , <span class="dt">PmType</span> <span class="dt">Quantitative</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- , PScale [SDomain (DNumbers [0, 1.0])]</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>          ]</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span> position</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>          <span class="dt">Y</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>          [<span class="dt">PName</span> <span class="st">&quot;value&quot;</span>, <span class="dt">PTitle</span> <span class="st">&quot;Magnetization [a.u.]&quot;</span>, <span class="dt">PmType</span> <span class="dt">Quantitative</span>]</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span> color [<span class="dt">MName</span> <span class="st">&quot;key&quot;</span>, <span class="dt">MTitle</span> <span class="st">&quot;Component&quot;</span>]</span></code></pre></div>
+<h3 id="pulse-sequences">Pulse sequences</h3>
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed"></script>
+
+<h4 id="free-induction-decay">Free induction decay</h4>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">main_fid ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>main_fid <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> dt     <span class="ot">=</span> <span class="fl">1e-3</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>      m0     <span class="ot">=</span> [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>      freq   <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>      t1     <span class="ot">=</span> <span class="fl">600e-3</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      t2     <span class="ot">=</span> <span class="fl">100e-3</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      n      <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>      res <span class="ot">=</span> runBlochST (fidST dt freq t1 t2 n) (initBlochS <span class="dv">0</span> m0)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  plotComponents <span class="st">&quot;fid.vg.json&quot;</span> [title <span class="st">&quot;Free induction decay&quot;</span> []] res</span></code></pre></div>
+<div id="fid"></div>
+<script type="text/javascript">
+  var spec = "../files/fid.vg.json";
+  vegaEmbed('#fid', spec).then(function(result) {}).catch(console.error);
+</script>
+
+<h4 id="saturation-recovery">Saturation recovery</h4>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ot">main_satrecov ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>main_satrecov <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> nTR       <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      ey        <span class="ot">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>      flipAngle <span class="ot">=</span> <span class="fu">pi</span> <span class="op">/</span> <span class="dv">3</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      freq      <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      t1        <span class="ot">=</span> <span class="fl">600e-3</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      t2        <span class="ot">=</span> <span class="fl">100e-3</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      dt        <span class="ot">=</span> <span class="fl">1e-3</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      nFid      <span class="ot">=</span> <span class="dv">500</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      m0        <span class="ot">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      res       <span class="ot">=</span> runBlochST</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        (replicateM_ nTR <span class="op">$</span> blockST ey flipAngle freq t1 t2 dt nFid)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        (initBlochS <span class="dv">0</span> m0)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  plotComponents <span class="st">&quot;satrecov.vg.json&quot;</span> [title <span class="st">&quot;Saturation recovery&quot;</span> []] res</span></code></pre></div>
+<div id="satrecov"></div>
+<script type="text/javascript">
+  var spec = "../files/satrecov.vg.json";
+  vegaEmbed('#satrecov', spec).then(function(result) {}).catch(console.error);
+</script>
+
+<h4 id="spin-echo">Spin echo</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ot">main_se ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>main_se <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> ey   <span class="ot">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>      ex   <span class="ot">=</span> [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>      freq <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>      t1   <span class="ot">=</span> <span class="fl">600e-3</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>      t2   <span class="ot">=</span> <span class="fl">100e-3</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>      dt   <span class="ot">=</span> <span class="fl">1e-3</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>      te   <span class="ot">=</span> <span class="fl">50e-3</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>      tR   <span class="ot">=</span> <span class="fl">500e-3</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>      nTR  <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>      m0   <span class="ot">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>      res  <span class="ot">=</span> runBlochST</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        (<span class="kw">do</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          replicateM_ nTR <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            blockST ey (<span class="fu">pi</span> <span class="op">/</span> <span class="dv">2</span>) freq t1 t2 dt (<span class="fu">floor</span> <span class="op">$</span> te <span class="op">/</span> <span class="dv">2</span> <span class="op">/</span> dt)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            blockST ex <span class="fu">pi</span>       freq t1 t2 dt (<span class="fu">floor</span> <span class="op">$</span> (tR <span class="op">-</span> te <span class="op">/</span> <span class="dv">2</span>) <span class="op">/</span> dt)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        (initBlochS <span class="dv">0</span> m0)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  plotComponents <span class="st">&quot;se.vg.json&quot;</span> [title <span class="st">&quot;Spin echo&quot;</span> []] res</span></code></pre></div>
+<div id="se"></div>
+<script type="text/javascript">
+  var spec = "../files/se.vg.json";
+  vegaEmbed('#se', spec).then(function(result) {}).catch(console.error);
+</script>
+
+<h4 id="gradient-echo">Gradient echo</h4>
+<p>tbc …</p>
+<h4 id="spoiled-gradient-echo">Spoiled gradient echo</h4>
+<p>tbc …</p>
+<h3 id="script">Script</h3>
+<p>To complete the script we need a main function:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  main_fid</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  main_satrecov</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  main_se</span></code></pre></div>
+<p><a href="../files/Bloch.hs">Here</a> is the complete code that can be run from the command line with <code class="verbatim">stack</code> like</p>
+<div class="sourceCode" id="cb12" data-tangle="no"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">stack</span> Bloch.hs</span></code></pre></div>
+<h3 id="intermittent-conclusion">Intermittent Conclusion</h3>
+<p>This was a nice exercise in using the State Monad and trying out the <code class="verbatim">hvega</code>. I will definitely try to learn more about vega(-lite) as it seems to be a great way to plot things, an important functionality which I wasn’t too happy with in Haskell yet. I might extend the code above to simulate an ensemble of isochromats and maybe use the project to practice some profiling.</p>
+    </section>
+</article>
+
+            </main>
+        </div>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
+    </body>
+</html>
