@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Personal Website">
+    <meta name="author" content="Max Diefenbach">
+    <title>Max Diefenbach</title>
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/a81715ae5b.js" crossorigin="anonymous"></script>
+    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../css/codeblock.css" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="container">
+            <div class="sidebar-about">
+                <div class="site__title">
+                    <a href="../">Max Diefenbach</a>
+                </div>
+                <div class="author-image">
+                    <a href="../"><img src="https://www.gravatar.com/avatar/cf1c28d916585358f56b58cb7cb7bf2b?s=240&amp;d=mp" class="img--circle img--headshot element--center" alt="gravatar"></a>
+                </div>
+                <div class="section__social">
+                    <section class="social">
+                        <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/diefenbach_max"><i class="fa fa-twitter fa-lg">
+                        </i></a> <a target="_blank" rel="noopener noreferrer" href="https://linkedin.com/in/maxdiefenbach"><i class="fa fa-linkedin fa-lg">
+                        </i></a> <a target="_blank" rel="noopener noreferrer" href="https://github.com/maxdiefenbach"><i class="fa fa-github fa-lg">
+                        </i></a> <a target="_blank" rel="noopener noreferrer" href="https://orcid.org/0000-0002-5581-885X"><i class="fab fa-orcid fa-lg">
+                        </i></a> <a target="_blank" rel="noopener noreferrer" href="https://www.researchgate.net/profile/Maximilian_Diefenbach">
+                        <i class="fab fa-researchgate fa-lg"></i></a>
+                    </section>
+                </div>
+                <div class="site__description">
+                    <p>Systems engineer, physicist, dev, Dr. rer.
+                    nat, emacs user, chess and ukulele player</p>
+                </div>
+            </div>
+            <div class="collapsible-menu">
+                <input type="checkbox" id="menuToggle"> <label for="menuToggle">Max Diefenbach</label>
+                <div class="menu-content">
+                    <ul class="sidebar-nav">
+                        <!-- <li><a href="/">Home</a></li> -->
+                        <li>
+                            <a href="../pages/contact.html">Contact</a>
+                        </li>
+                        <li>
+                            <a href="../pages/research.html">Research</a>
+                        </li>
+                        <li>
+                            <a href="../pages/code.html">Code</a>
+                        </li>
+                        <li>
+                            <a href="../pages/posts.html">Posts</a>
+                        </li>
+                        <li>
+                            <a href="../pages/impressum.html" style="font-size:small;color:rgba(255,255,255,0.5);">
+                            Impressum</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2016--2022 Max Diefenbach
+            </div>
+        </div>
+    </div>
+    <div class="content container">
+        <main role="main">
+            <h1>Emacs/JuliaFormatter -- how to call a shell command on region</h1><article>
+    <section class="header">
+        Posted on January  4, 2024
+        
+        <div class="info">
+            
+            Tags: <a title="All pages tagged 'howto'." href="../posts/tags/howto.html">howto</a>, <a title="All pages tagged 'emacs'." href="../posts/tags/emacs.html">emacs</a>, <a title="All pages tagged 'julia'." href="../posts/tags/julia.html">julia</a>
+            
+        </div>
+    </section>
+    <br />
+    <section>
+        <p><em>Quick reminder on how to write emacs lisp functions calling shell commands on the region.</em></p>
+<p>In doom emacs based on emacs 29.1 with the <a href="https://codeberg.org/FelipeLema/julia-formatter.el"><code class="verbatim">julia-formatter.el</code> package</a>, I could not get a proper auto formatting to work in reasonable time, but I wanted to write an article in org-mode with a lot of julia source blocks, which I partly copy-pasted and which were therefore unformatted. For the moment I ended up writing a small emacs-lisp wrapper function to call the julia formatter from the commandline passing the current region or buffer as the stdin.</p>
+<p>First I needed to install the <a href="https://domluna.github.io/JuliaFormatter.jl/dev/"><code class="verbatim">JuliaFormatter.jl</code> package</a>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>] add JuliaFormatter</span></code></pre></div>
+<p>The simple cli onliner to format stdin is</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">julia</span> <span class="at">-e</span> <span class="st">'import JuliaFormatter; print(JuliaFormatter.format_text(read(stdin, String)))'</span></span></code></pre></div>
+<p>This was wrapped in the <code class="verbatim">shell-command-on-region</code> called from interactive defuns:</p>
+<div class="sourceCode" id="cb3" data-org-language="emacs-lisp" data-tangle="yes"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">defun</span><span class="fu"> mnd/format-julia-region </span>(p1 p2)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  (interactive <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  (shell-command-on-region p1 p2 <span class="st">&quot;julia -e 'using JuliaFormatter; print(format_text(read(stdin, String)))'&quot;</span> <span class="kw">nil</span> <span class="kw">t</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>(<span class="kw">defun</span><span class="fu"> mnd/format-julia-buffer </span>()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  (interactive)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  (mnd/format-julia-region (point-min) (point-max)))</span></code></pre></div>
+<p>The optional third (nil) and forth (t) arguments from the <code class="verbatim">shell-command-on-region</code> specify the output-buffer (nil) and whether to replace the region with the command’s stdout (t), respectively (see docstring).</p>
+<p>Got the job done in less time than to dig into getting the emacs package to run.</p>
+    </section>
+</article>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    var disqus_config = function () {
+    this.page.url = "https://maxdiefenbach.de//posts/2024-01-04-shell_cmd_on_region.html";  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = "https://maxdiefenbach.de//posts/2024-01-04-shell_cmd_on_region.html"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://maxdiefenbach-de.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </main>
+    </div>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
+</body>
+</html>
