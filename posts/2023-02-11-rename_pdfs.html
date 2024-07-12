@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Personal Website">
+    <meta name="author" content="Max Diefenbach">
+    <title>Max Diefenbach</title>
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/a81715ae5b.js" crossorigin="anonymous"></script>
+    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../css/codeblock.css" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="container">
+            <div class="sidebar-about">
+                <div class="site__title">
+                    <a href="../">Max Diefenbach</a>
+                </div>
+                <div class="author-image">
+                    <a href="../"><img src="https://www.gravatar.com/avatar/cf1c28d916585358f56b58cb7cb7bf2b?s=240&amp;d=mp" class="img--circle img--headshot element--center" alt="gravatar"></a>
+                </div>
+                <div class="section__social">
+                    <section class="social">
+                        <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/diefenbach_max"><i class="fa fa-twitter fa-lg">
+                        </i></a> <a target="_blank" rel="noopener noreferrer" href="https://linkedin.com/in/maxdiefenbach"><i class="fa fa-linkedin fa-lg">
+                        </i></a> <a target="_blank" rel="noopener noreferrer" href="https://github.com/maxdiefenbach"><i class="fa fa-github fa-lg">
+                        </i></a> <a target="_blank" rel="noopener noreferrer" href="https://orcid.org/0000-0002-5581-885X"><i class="fab fa-orcid fa-lg">
+                        </i></a> <a target="_blank" rel="noopener noreferrer" href="https://www.researchgate.net/profile/Maximilian_Diefenbach">
+                        <i class="fab fa-researchgate fa-lg"></i></a>
+                    </section>
+                </div>
+                <div class="site__description">
+                    <p>Systems engineer, physicist, dev, Dr. rer.
+                    nat, emacs user, chess and ukulele player</p>
+                </div>
+            </div>
+            <div class="collapsible-menu">
+                <input type="checkbox" id="menuToggle"> <label for="menuToggle">Max Diefenbach</label>
+                <div class="menu-content">
+                    <ul class="sidebar-nav">
+                        <!-- <li><a href="/">Home</a></li> -->
+                        <li>
+                            <a href="../pages/contact.html">Contact</a>
+                        </li>
+                        <li>
+                            <a href="../pages/research.html">Research</a>
+                        </li>
+                        <li>
+                            <a href="../pages/code.html">Code</a>
+                        </li>
+                        <li>
+                            <a href="../pages/posts.html">Posts</a>
+                        </li>
+                        <li>
+                            <a href="../pages/impressum.html" style="font-size:small;color:rgba(255,255,255,0.5);">
+                            Impressum</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2016--2024 Max Diefenbach
+            </div>
+        </div>
+    </div>
+    <div class="content container">
+        <main role="main">
+            <h1>How to rename PDF files of scientific articles automatically according to bibtex information</h1><article>
+    <section class="header">
+        Posted on February 11, 2023
+        
+        <div class="info">
+            
+            Tags: <a title="All pages tagged 'howto'." href="../posts/tags/howto.html">howto</a>, <a title="All pages tagged 'python'." href="../posts/tags/python.html">python</a>
+            
+        </div>
+    </section>
+    <br />
+    <section>
+        <p>I mostly read scientific papers or technical articles, which I often download as pdf from the arxiv or journal websites. Most pdf files are not descriptively named, so I always end up with folders of many cryptically named files.</p>
+<p>To automatically rename the pdf files according to the bibtex information, authors, year, title, journal, …., I tried to use the emacs <a href="https://github.com/jkitchin/org-ref">org-ref</a> functionalities in the past and also wrote my own “bibtex-helper (hbib)” tool in Haskell. However, I always wanted a simpler commandline tool for this job. Some day I found the python program <a href="https://github.com/MicheleCotrufo/pdf-renamer"><code class="verbatim">pdf-renamer</code></a>, which uses two other packages, pdf2doi and pdf2bib, by the same author to query for reference information online and create bibtex entries.</p>
+<p>The options for the renaming format was not freely customizable to my liking, but the underlying libraries are great to use in python scripts, so one can quickly write the desired functionality oneself.</p>
+<p>I just installed the package via pip</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pip install pdf2bib</span></code></pre></div>
+<p>… made the following script executable ($ chmod +x …) and copied it to <code class="verbatim">~/.local/bin/pdfrename</code> to have it in the PATH.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env ipython</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdf2bib</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>parser <span class="op">=</span> argparse.ArgumentParser(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    prog<span class="op">=</span><span class="st">&quot;pdfrename&quot;</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    description<span class="op">=</span><span class="st">'Auto rename PDF files into &quot;</span><span class="sc">{FirstAuthorLastname}{Year}</span><span class="st">_</span><span class="sc">{Title}</span><span class="st">.pdf&quot;'</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    epilog<span class="op">=</span><span class="st">&quot;Based on Michele Cotrufo's pdf2doi, pdf2bib, and pdf-renamer&quot;</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>parser.add_argument(<span class="st">&quot;filename&quot;</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    filename <span class="op">=</span> args.filename</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> pdf2bib.pdf2bib_singlefile(filename)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    metadata <span class="op">=</span> result[<span class="st">&quot;metadata&quot;</span>]</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    new_filename <span class="op">=</span> <span class="ss">f&quot;</span><span class="sc">{</span>metadata[<span class="st">'author'</span>][<span class="dv">0</span>][<span class="st">'family'</span>]<span class="sc">.</span>lower()<span class="sc">}{</span>metadata[<span class="st">'year'</span>]<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span><span class="st">'-'</span><span class="sc">.</span>join([w.lower() <span class="cf">for</span> w <span class="kw">in</span> metadata[<span class="st">'title'</span>].split()])<span class="sc">}</span><span class="ss">.pdf&quot;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(filename)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;--&gt;&quot;</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(new_filename)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    Path(filename).rename(new_filename)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
+    </section>
+</article>
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    var disqus_config = function () {
+    this.page.url = "https://maxdiefenbach.de//posts/2023-02-11-rename_pdfs.html";  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = "https://maxdiefenbach.de//posts/2023-02-11-rename_pdfs.html"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://maxdiefenbach-de.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </main>
+    </div>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
+</body>
+</html>
